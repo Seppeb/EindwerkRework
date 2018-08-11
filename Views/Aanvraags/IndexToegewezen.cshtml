@@ -42,7 +42,7 @@
     <tbody>
         @foreach (var item in Model)
             {
-            @if (item.IsVraag != true)
+            @if (item.IsVraag != true && item.Status.Naam != "Afgesloten")
                 {
                 <tr>
                     <td>
@@ -78,3 +78,78 @@
         }
     </tbody>
 </table>
+<p>
+    <a class="btn grey" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+       Archief
+    </a>
+</p>
+<div class="collapse" id="collapseExample">
+
+
+    <table class="table table-responsive table-condensed table-hover table-striped">
+
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titel)
+                </th>
+                <th>
+                    Gebruiker
+                </th>
+                <th>
+                    Periode
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.IsVraag != true && item.Status.Naam == "Afgesloten")
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Titel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDatum) -
+                            @Html.DisplayFor(modelItem => item.EindDatum)
+                        </td>
+                        <td class="btn-link">
+                            @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+                        </td>
+                        <td class="btn-link">
+                            @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.Naam)
+                        </td>
+                        <td>
+                            <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                        </td>
+                        <td>
+                            <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                        </td>
+                        <td>
+                            <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    </div>

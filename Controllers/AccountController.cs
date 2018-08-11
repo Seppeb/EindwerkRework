@@ -76,7 +76,12 @@ namespace ApplicationRequestIt.Controllers
                 {
                     if (user.isEnabled == false)
                     {
-                        ModelState.AddModelError(string.Empty, "Account is inactief");
+                        ModelState.AddModelError(string.Empty, "Account is inactief.");
+                        return View(model);
+                    }
+                    if (user.EmailConfirmed == false)
+                    {
+                        ModelState.AddModelError(string.Empty, "Gelieve eerst te activeren via de aangekregen mail.");
                         return View(model);
                     }
                     _logger.LogInformation("Gebruiker is ingelogt");
@@ -268,8 +273,12 @@ namespace ApplicationRequestIt.Controllers
                     
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-
+                    var callbackUrl = Url.Page(
+                        "/Account/confirmEmail",
+                        pageHandler: null,
+                        values: new {userId = user.Id, code = code},
+                        protocol: Request.Scheme);                  
+                    
                     await _emailSender.SendEmailAsync(model.Email, "account bevestigen", $"bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier</a> te klikken.");
 
                    // await _signInManager.SignInAsync(user, isPersistent: false);
@@ -413,8 +422,8 @@ namespace ApplicationRequestIt.Controllers
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                await _emailSender.SendEmailAsync(model.Email, "Herstel Paswoord",
+                   $"Herstel je paswoord door hier te klikken: <a href='{callbackUrl}'>link</a>");
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
             }
 

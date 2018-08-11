@@ -22,7 +22,7 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Titel)
-            </th>            
+            </th>
             <th>
                 Gebruiker
             </th>
@@ -48,6 +48,8 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
+    {
+        @if (item.Status.Naam != "Afgesloten")
         {
         <tr>
             <td>
@@ -61,7 +63,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartDatum) - @Html.DisplayFor(modelItem => item.EindDatum)
-            </td>            
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
             </td>
@@ -72,16 +74,16 @@
                 @Html.DisplayFor(modelItem => item.Status.Naam)
             </td>
             @if (item.BehandelaarApplicationUser == null)
-    {
-        <td>Geen toegewezen</td>
-}
-else
-{
+            {
+            <td>Geen toegewezen</td>
+            }
+            else
+            {
         <td>
             @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
             @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
         </td>
-}
+            }
             <td>
                 <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
             </td>
@@ -92,35 +94,129 @@ else
                 <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
             </td>
         </tr>
+            }
         }
     </tbody>
 </table>
 
-@*@{var username = ""; }
-@foreach (var user in Model)
-{
+<p>
+    <a class="btn grey" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Archief
+    </a>
+</p>
 
-    @if (user.ApplicationUser.UserName != username)
-    {
-        username = user.ApplicationUser.UserName;
-        <ul class="collapsible">
-            <li>
-                <div class="collapsible-header">@Html.DisplayFor(modelItem => user.ApplicationUser.UserName)</div>
-                <div class="collapsible-body">
-                    <span>
-                        dfsdfdfssdfsdlkfhsdlkfhsdfkldshfkl
-                    </span>
-                </div>
-            </li>
-        </ul>
-    }
-}*@
+<div class="collapse" id="collapseExample">
 
-@*<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var elems = document.querySelectorAll('.collapsible');
-        var instances = M.Collapsible.init(elems, options);
-    });
-</script>*@
+
+    <table class="table table-responsive table-condensed table-hover table-striped centered">
+        <thead class="">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titel)
+                </th>
+                <th>
+                    Gebruiker
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Aanmaakdatum)
+                </th>
+                <th>
+                    Periode
+                <th>
+                    @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.Status.Naam == "Afgesloten")
+                {
+
+              
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Aanmaakdatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDatum) - @Html.DisplayFor(modelItem => item.EindDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Naam)
+                    </td>
+                    @if (item.BehandelaarApplicationUser == null)
+                    {
+                        <td>Geen toegewezen</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
+                        </td>
+                    }
+                    <td>
+                        <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+                    </td>
+                    <td>
+                        <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+                    </td>
+                    <td>
+                        <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+    </div>
+    @*@{var username = ""; }
+        @foreach (var user in Model)
+        {
+
+            @if (user.ApplicationUser.UserName != username)
+            {
+                username = user.ApplicationUser.UserName;
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header">@Html.DisplayFor(modelItem => user.ApplicationUser.UserName)</div>
+                        <div class="collapsible-body">
+                            <span>
+                                dfsdfdfssdfsdlkfhsdlkfhsdfkldshfkl
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            }
+        }*@
+
+    @*<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var elems = document.querySelectorAll('.collapsible');
+                var instances = M.Collapsible.init(elems, options);
+            });
+        </script>*@
 
 

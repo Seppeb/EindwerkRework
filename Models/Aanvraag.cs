@@ -53,7 +53,7 @@ namespace ApplicationRequestIt.Models
         [DisplayName("Behandelaar")]
         public virtual ApplicationUser BehandelaarApplicationUser { get; set; }
 
-        
+
         //relatie met Status
         public int StatusId { get; set; }
         [ForeignKey("StatusId")]
@@ -62,7 +62,8 @@ namespace ApplicationRequestIt.Models
         public ICollection<Bericht> Berichten { get; set; }
 
         //erbij om relatie met behandelaar te maken meer op meer
-        //public List<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
+        //[DisplayName("Behandelaars")]
+        //public ICollection<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
 
 
     }

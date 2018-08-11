@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "5006bd028882fa704e25d4235e6279baf1d5a69c"
+    "signature": "4c4a564fd7b70b791af7e8f8278d6cf1affbd656"
   },
   "compilationOptions": {
     "defines": [
@@ -29,7 +29,7 @@
           "Microsoft.NETCore.App": "2.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.0",
           "Sendgrid": "9.9.0",
-          "bootstrap": "4.1.1"
+          "bootstrap": "4.1.3"
         },
         "runtime": {
           "ApplicationRequestIt.dll": {}
@@ -38,7 +38,7 @@
           "ApplicationRequestIt.dll": {}
         }
       },
-      "bootstrap/4.1.1": {
+      "bootstrap/4.1.3": {
         "dependencies": {
           "jQuery": "3.0.0",
           "popper.js": "1.14.0"
@@ -4275,12 +4275,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "bootstrap/4.1.1": {
+    "bootstrap/4.1.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GAW8nugGorUxJRAIYrJ69tantpLlosqABI2cen74ipe3XbllvV2efdskNLXlt9vpsKL6JZjopLN56ib7R2cmJA==",
-      "path": "bootstrap/4.1.1",
-      "hashPath": "bootstrap.4.1.1.nupkg.sha512"
+      "sha512": "sha512-eyaT3ZkeOGyj3qXmQJziQNyh+bYzNKtx9QrxETNgzqOxWvsvNoGrAr03426N7AMG+VJayKWtjg4FpGYmPhyuTg==",
+      "path": "bootstrap/4.1.3",
+      "hashPath": "bootstrap.4.1.3.nupkg.sha512"
     },
     "bootstrap.less/3.3.5": {
       "type": "package",

@@ -44,9 +44,9 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
-            {
+        {
             @if (item.IsVraag != true)
-                {
+            {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Titel)
@@ -100,20 +100,18 @@
         }
     </tbody>
 </table>
+    @foreach (var user in Model)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Gebruiker -
+                        @Html.DisplayFor(modelItem => user.ApplicationUser.UserName)
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    }
 
-
-@foreach (var user in Model)
-{
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    Gebruiker -
-                    @Html.DisplayFor(modelItem => user.ApplicationUser.UserName)
-                </th>
-            </tr>
-        </thead>
-    </table>
-}
-
-<script src="~/js/site.js"></script>
+    <script src="~/js/site.js"></script>

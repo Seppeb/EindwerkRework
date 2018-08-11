@@ -25,7 +25,7 @@ namespace ApplicationRequestIt.Models
         public ICollection<Bericht> UserBerichten { get; set; }
 
         //extra om relatie te maken met aanvragen en behandelaren meer op meer
-        //public List<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
+        //public ICollection<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
 
     }
 }

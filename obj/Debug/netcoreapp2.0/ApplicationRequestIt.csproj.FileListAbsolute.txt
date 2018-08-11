@@ -34,3 +34,15 @@ C:\Users\bergh\Documents\School\Eindwerk\RequestIt\Eindwerk Seppe Berghmans c103
 C:\Users\bergh\Documents\School\Eindwerk\RequestIt\Eindwerk Seppe Berghmans c1035443\ApplicationRequestIt\ApplicationRequestIt\obj\Debug\netcoreapp2.0\ApplicationRequestIt.AssemblyInfo.cs
 C:\Users\bergh\Documents\School\Eindwerk\RequestIt\Eindwerk Seppe Berghmans c1035443\ApplicationRequestIt\ApplicationRequestIt\obj\Debug\netcoreapp2.0\ApplicationRequestIt.dll
 C:\Users\bergh\Documents\School\Eindwerk\RequestIt\Eindwerk Seppe Berghmans c1035443\ApplicationRequestIt\ApplicationRequestIt\obj\Debug\netcoreapp2.0\ApplicationRequestIt.pdb
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\bin\Debug\netcoreapp2.0\ApplicationRequestIt.deps.json
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\bin\Debug\netcoreapp2.0\ApplicationRequestIt.runtimeconfig.json
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\bin\Debug\netcoreapp2.0\ApplicationRequestIt.runtimeconfig.dev.json
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\bin\Debug\netcoreapp2.0\ApplicationRequestIt.dll
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\bin\Debug\netcoreapp2.0\ApplicationRequestIt.pdb
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.csprojResolveAssemblyReference.cache
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.csproj.CoreCompileInputs.cache
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.AssemblyInfoInputs.cache
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.AssemblyInfo.cs
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.dll
+C:\Users\bergh\Desktop\Eindwerk\Eindwerk\EindwerkRework\obj\Debug\netcoreapp2.0\ApplicationRequestIt.pdb
