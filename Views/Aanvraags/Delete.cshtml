@@ -1,0 +1,101 @@
+﻿@model ApplicationRequestIt.Models.Aanvraag
+@{
+    ViewData["Title"] = "Delete";
+}
+<h2>Verwijderen</h2>
+<h3>Ben u zeker dat u deze aanvraag wilt verwijderen?</h3>
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="Titel" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="Titel" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="Omschrijving" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <textarea asp-for="Omschrijving" rows="4" cols="3" readonly class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="Aanmaakdatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="Aanmaakdatum" type="datetime" readonly class="form-control date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="StartDatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="StartDatum" type="datetime" readonly class="form-control date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="EindDatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="EindDatum" type="datetime" readonly class="form-control date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="LinkVoorbeeldKlant" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="LinkVoorbeeldKlant" readonly class="form-control url" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="LinkVoorbeeldBehandelaar" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="LinkVoorbeeldBehandelaar" readonly class="form-control url" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="Status.Naam" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="Status.Naam" rows="4" cols="3" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="BehandelaarApplicationUser" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="BehandelaarApplicationUser.Voornaam" rows="4" cols="3" readonly class="form-control" />
+        </div>
+    </div>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Verwijder" class="btn red" asp-route-isAlles="@ViewBag.isAlles" asp-route-index="@ViewBag.index" asp-route-isToegezen="@ViewBag.isToegezen" />
+    @if (ViewBag.IsAlles == true)
+    {
+        <a asp-action="IndexAllAanvragen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+    }
+    else if (ViewBag.index == true)
+    {
+        <a asp-action="Index" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+
+    }
+    else if (ViewBag.isToegezen == true)
+    {
+        <a asp-action="IndexToegewezen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+    }
+    
+</form>
+

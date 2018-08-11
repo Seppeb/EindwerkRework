@@ -1,0 +1,119 @@
+﻿@model ApplicationRequestIt.Models.Aanvraag
+@using ApplicationRequestIt.Utility
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (Model.IsVraag == true)
+{
+    <h2>Pas de vraag aan</h2>
+}
+else
+{
+    <h2>Pas aanvraag aan</h2>
+}<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" class="table-responsive">
+
+            @if (Model.IsVraag == true)
+            {
+                <div class="form-group">
+                    <label asp-for="Titel" class="control-label"></label>
+                    <input asp-for="Titel" class="form-control" />
+                    <span asp-validation-for="Titel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Omschrijving" class="control-label"></label>
+                    <textarea asp-for="Omschrijving" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Omschrijving" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StartDatum" class="control-label"></label>
+                    <input asp-for="StartDatum" readonly class="form-control" />
+                    <span asp-validation-for="StartDatum" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="IsVraag" value=true />
+                <input type="hidden" asp-for="StatusId" value=1 />
+            }
+            else
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Titel" class="control-label"></label>
+                    <input asp-for="Titel" class="form-control" />
+                    <span asp-validation-for="Titel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Omschrijving" class="control-label"></label>
+                    <input asp-for="Omschrijving" class="form-control" />
+                    <span asp-validation-for="Omschrijving" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StartDatum" class="control-label"></label>
+                    <input asp-for="StartDatum" readonly class="form-control" />
+                    <span asp-validation-for="StartDatum" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LinkVoorbeeldKlant" class="control-label"></label>
+                    <input asp-for="LinkVoorbeeldKlant" class="form-control" />
+                    <span asp-validation-for="LinkVoorbeeldKlant" class="text-danger"></span>
+                </div>
+
+                @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.BehandelaarEndUser))
+                {
+                    <div class="form-group">
+                        <label asp-for="LinkVoorbeeldBehandelaar" class="control-label"></label>
+                        <input asp-for="LinkVoorbeeldBehandelaar" class="form-control" />
+                        <span asp-validation-for="LinkVoorbeeldBehandelaar" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusList"></select>
+                        <span asp-validation-for="StatusId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BehandelaarApplicationUser" class="control-label"></label>
+                        <select asp-for="BehandelaarId" class="form-control" asp-items="ViewBag.BehandelaarId"></select>
+                        <span asp-validation-for="BehandelaarId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+
+                    <div class="form-group">
+                        <label asp-for="LinkVoorbeeldBehandelaar" class="control-label"></label>
+                        <input asp-for="LinkVoorbeeldBehandelaar" readonly class="form-control" />
+                        <span asp-validation-for="LinkVoorbeeldBehandelaar" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        <select asp-for="StatusId" class="form-control" disabled asp-items="ViewBag.StatusList"></select>
+                        <input asp-for="StatusId" type="hidden" class="form-control" />
+                        <span asp-validation-for="StatusId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BehandelaarApplicationUser" class="control-label"></label>
+                        <select asp-for="BehandelaarId" class="form-control" disabled asp-items="ViewBag.BehandelaarId"></select>
+                        <span asp-validation-for="BehandelaarId" class="text-danger"></span>
+                    </div>
+                }
+
+            }
+            <div class="form-group">
+                <input asp-for="UserId" type="hidden" class="form-control" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="IndexAllAanvragen">Terug naar overzicht</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.Aanvraag>
+
+@{
+    ViewData["Title"] = "IndexAllAanvragen";
+}
+
+<h2>Overzicht van alle aanvragen</h2>
+
+<table class="table table-responsive table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Omschrijving)
+            </th>
+            <th>
+                Gebruiker
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status.Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDatum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EindDatum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            @if (item.IsVraag != true)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Omschrijving)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Naam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EindDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Naam)
+                    </td>
+                    @if (item.BehandelaarApplicationUser == null)
+                    {
+                        <td>Geen toegewezen</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
+                        </td>
+                    }
+                    <td>
+                        <a class="btn btn-primary glyphicon glyphicon-edit" asp-action="EditAllAanvragen" asp-route-id="@item.Id"></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-info glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@foreach (var user in Model)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Gebruiker -
+                    @Html.DisplayFor(modelItem => user.ApplicationUser.UserName)
+                </th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<script src="~/js/site.js"></script>

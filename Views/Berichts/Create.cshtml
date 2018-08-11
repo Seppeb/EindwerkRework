@@ -1,0 +1,38 @@
+﻿@model ApplicationRequestIt.Models.Bericht
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Bericht</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <input asp-for="StartDate" value="@DateTime.Now" type="hidden" class="form-control" />
+            <input asp-for="AanvraagId" type="hidden" class="form-control" asp-items="ViewBag.AanvraagId" />
+            <input asp-for="applicationuserId" type="hidden" class="form-control" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Titel" class="control-label"></label>
+                <input asp-for="Titel" class="form-control" />
+                <span asp-validation-for="Titel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inhoud" class="control-label"></label>
+                <input asp-for="Inhoud" class="form-control" />
+                <span asp-validation-for="Inhoud" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+             </div>
+            <div class="form-group">
+                <input type="submit" value="Nieuw" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="Index" asp-route-Aanvraagid="Viewbag.AanvraagId">Terug naar overzicht berichten</a>
+            </div>
+        </form>
+    </div>
+</div>
+

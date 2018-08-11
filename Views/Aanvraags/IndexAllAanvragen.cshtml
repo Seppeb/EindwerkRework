@@ -1,0 +1,126 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.Aanvraag>
+
+
+@{
+    ViewData["Title"] = "IndexAllAanvragen";
+}
+<h2>Alle aanvragen</h2>
+
+
+<form asp-action="IndexAllAanvragen" method="get">
+    <div class="form-actions no-color">
+        <div class="row text-right">
+            <label>Zoekterm:</label><input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Filter" class="btn blue" />
+            <a class="btn green" asp-action="IndexAllAanvragen">Toon alles</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-responsive table-condensed table-hover table-striped centered">
+    <thead class="">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>            
+            <th>
+                Gebruiker
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.Aanmaakdatum)
+            </th>
+            <th>
+                Periode
+            <th>
+                @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aanmaakdatum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDatum) - @Html.DisplayFor(modelItem => item.EindDatum)
+            </td>            
+            <td>
+                @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.Naam)
+            </td>
+            @if (item.BehandelaarApplicationUser == null)
+    {
+        <td>Geen toegewezen</td>
+}
+else
+{
+        <td>
+            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
+            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
+        </td>
+}
+            <td>
+                <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+            </td>
+            <td>
+                <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+            </td>
+            <td>
+                <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@*@{var username = ""; }
+@foreach (var user in Model)
+{
+
+    @if (user.ApplicationUser.UserName != username)
+    {
+        username = user.ApplicationUser.UserName;
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header">@Html.DisplayFor(modelItem => user.ApplicationUser.UserName)</div>
+                <div class="collapsible-body">
+                    <span>
+                        dfsdfdfssdfsdlkfhsdlkfhsdfkldshfkl
+                    </span>
+                </div>
+            </li>
+        </ul>
+    }
+}*@
+
+@*<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, options);
+    });
+</script>*@
+
+

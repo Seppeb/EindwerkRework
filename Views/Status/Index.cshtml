@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.Status>
+@{
+    ViewData["Title"] = "Index";
+}
+<h2>StatusBeheer</h2>
+<p>
+    <a class="btn blue" asp-action="Create">Nieuwe status</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Omschrijving)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Omschrijving)
+                </td>
+                <td>
+                    <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a> 
+
+                    @* dit zorgt ervoor dat de standaard status die meegegeven wordt bij het aanmaken van een aanvraag niet verwijderd kan worden *@
+                    @if (item.Id == 1)
+                    {                      
+                    }
+                    else
+                    {
+                        <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                    }
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

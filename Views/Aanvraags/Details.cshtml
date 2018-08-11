@@ -1,0 +1,151 @@
+﻿@model ApplicationRequestIt.Models.AanvraagsBerichtenViewmodel.AanvraagBerichtenViewmodel
+@using ApplicationRequestIt.Utility
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.Titel" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.Titel" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.Omschrijving" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <textarea asp-for="aanvraag.Omschrijving" rows="4" cols="3" readonly class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.Aanmaakdatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.Aanmaakdatum" type="datetime" readonly class="form-control date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.StartDatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.StartDatum" type="datetime" readonly class="form-control date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.EindDatum" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.EindDatum" type="datetime" readonly class="form-control date-text" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.LinkVoorbeeldKlant" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.LinkVoorbeeldKlant" readonly class="form-control btn-link" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.LinkVoorbeeldBehandelaar" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.LinkVoorbeeldBehandelaar" readonly class="form-control btn-link" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.Status.Naam" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.Status.Naam" rows="4" cols="3" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="aanvraag.BehandelaarApplicationUser" class="control-label"></label>
+        </div>
+        <div class="col-sm-8">
+            <input asp-for="aanvraag.BehandelaarApplicationUser.Voornaam" rows="4" cols="3" readonly class="form-control" />
+        </div>
+    </div>
+    
+</div>
+
+<div>
+    <a class="btn blue" asp-action="Edit" asp-route-id="@Model.aanvraag.Id" asp-route-isAlles="@ViewBag.isAlles" asp-route-index="@ViewBag.index" asp-route-isToegezen="@ViewBag.isToegezen">Pas aan</a>
+    @if (ViewBag.IsAlles == true)
+    {
+        <a asp-action="IndexAllAanvragen" asp-controller="Aanvraags" class="btn green">Back to List</a>
+    }
+    else if (ViewBag.index == true)
+    {
+        <a asp-action="Index" asp-controller="Aanvraags" class="btn green">Back to List</a>
+
+    }
+    else if (ViewBag.isToegezen == true)
+    {
+        <a asp-action="IndexToegewezen" asp-controller="Aanvraags" class="btn green">Back to List</a>
+    }
+</div>
+<br />
+
+<h4>Stel ons een vraag</h4>
+<hr />
+@foreach (var bericht in Model.berichten)
+{
+    if (bericht.BehandelaarBericht == true)
+    {
+        <div class="row">
+            <div class="text-right">
+                
+                <label style="font-size:large" class="label  label-danger"> @bericht.Inhoud</label> 
+                <label class="label label-default">@bericht.applicationuser.Voornaam</label> 
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="text-left">
+                <label style="font-size:large" class="label label-success"> @bericht.Inhoud</label> 
+                <label class="label label-default">@bericht.applicationuser.Voornaam</label> 
+            </div>
+        </div>
+    }
+}
+<br/>
+<form asp-action="AddBericht">
+    @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.BehandelaarEndUser))
+    {
+        <input asp-for="bericht.BehandelaarBericht" value="true" type="hidden" />
+    }
+    else
+    {
+        <input asp-for="bericht.BehandelaarBericht" value="false" type="hidden" />
+    }
+
+    <div class="row">
+        <textarea rows="4" cols="100%" asp-for="bericht.Inhoud"></textarea>
+    </div>
+    @*<input asp-for="bericht.applicationuserId" value="@Model.aanvraag.UserId" type="hidden" />*@
+    <input asp-for="bericht.AanvraagId" value="@Model.aanvraag.Id" type="hidden" />
+    <div class="row">
+        <input type="submit" value="Stel vraag" class="btn blue" />
+    </div>
+</form>
+<br />
+<hr />

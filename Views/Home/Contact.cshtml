@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+<h2>@ViewData["Title"]</h2>
+<br/>
+
+<address>
+    Industrielaan 6 <br />
+    2250 Olen<br />
+    <strong>Mail:</strong> <a href="mailto:info@dobit.be">info@dobit.be</a>
+</address>
+
+<address>
+    <strong>Content:</strong> <p>+32 (0)14 248 381</p><br />
+    <strong>Support:</strong> <p>+32 (0)14 285 786</p><br />
+    <strong>Receptie:</strong> <p>+32 (0)14 285 785</p><br />
+ </address>
+<div id="map"></div>
+<script>
+     function initMap() {
+         var olen = { lat: 51.151554, lng: 4.873074 };
+         var dobit = { lat: 51.15177327, lng: 4.87276785 };
+         var map = new google.maps.Map(document.getElementById('map'), {
+             zoom: 13,
+             center: olen
+         });
+         var marker = new google.maps.Marker({
+             position: dobit,
+             label: "Dobit Nv",
+             map: map
+         });
+     }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLhHzsIjrmtbqq5EBUE7dQrQeJgAFDFEA&callback=initMap">
+    //AIzaSyCV62UY5UgMJWoK2E85yfsw7Cj3O23cBQ4
+</script>
+
+

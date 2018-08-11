@@ -1,0 +1,78 @@
+﻿@model ApplicationRequestIt.Models.Aanvraag
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script>document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    var instances = M.Datepicker.init(elems, options);
+  });</script>
+
+<h2>Maak een nieuwe aanvraag</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="input-field">
+                <div class="form-group">
+                    <label asp-for="Titel" class="control-label"></label>
+                    <input placeholder="Titel" asp-for="Titel" class="form-control" />
+                    <span asp-validation-for="Titel" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Omschrijving" class="control-label"></label>
+                <textarea placeholder="Omschrijving" asp-for="Omschrijving" class="form-control" ></textarea>
+                <span asp-validation-for="Omschrijving" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDatum" class="control-label"></label>
+                <input type="date" asp-for="StartDatum" placeholder="start datum" class="form-control"/>                
+                <span asp-validation-for="StartDatum" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="EindDatum" class="control-label"></label>
+                <input type="date" placeholder="eind datum" asp-for="EindDatum" class="form-control" />                
+                <span asp-validation-for="EindDatum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LinkVoorbeeldKlant" class="control-label"></label>
+                <input placeholder="Link Klant" asp-for="LinkVoorbeeldKlant" class="form-control" />
+                <span asp-validation-for="LinkVoorbeeldKlant" class="text-danger"></span>
+            </div>
+
+            <input asp-for="StatusId" value="1" type="hidden" class="form-control" />
+            <input asp-for="UserId" type="hidden" class="form-control" />
+            <input asp-for="Aanmaakdatum" type="hidden" value="@DateTime.Now" class="form-control" />
+
+            <div class="form-group">
+                <input type="submit" value="Maak aan" class="btn blue" />
+                @if (ViewBag.IsAlles == true)
+                {
+                    <a asp-action="IndexAllAanvragen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+                }
+                else if (ViewBag.index == true)
+                {
+                    <a asp-action="Index" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+
+                }
+                else if (ViewBag.isToegezen == true)
+                {
+                    <a asp-action="IndexToegewezen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
+                }                
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

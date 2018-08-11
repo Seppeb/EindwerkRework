@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.Bericht>
+@{
+    ViewData["Title"] = "Index";
+}
+<h4>Berichten</h4>
+<br />
+<p>
+    <a class="btn btn-primary" asp-action="Create" asp-route-AanvraagId="@ViewBag.AanvraagId">Nieuw bericht</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inhoud)
+            </th>
+            <th>
+                Gebruiker
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inhoud)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.applicationuser.Voornaam) -
+                    @Html.DisplayFor(modelItem => item.applicationuser.Achternaam)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@*<div class="col-sm-3">
+    <label class="control-label">@Html.DisplayNameFor(model => model.Titel)</label>
+</div>
+<div class="col-sm-4">
+    <label class="control-label">@Html.DisplayNameFor(model => model.Inhoud)</label>
+</div>
+<div class="col-sm-2">
+    <label class="control-label">@Html.DisplayNameFor(model => model.StartDate)</label>
+</div>
+<div class="col-sm-2">
+    <label class="control-label">
+        Gebruiker
+    </label>
+</div>
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-sm-3">
+            <label class="control-label">@Html.DisplayFor(modelItem => item.Titel)</label>
+        </div>
+        <div class="col-sm-4">
+            <textarea class="control-label">@Html.DisplayFor(modelItem => item.Inhoud)</textarea>
+        </div>
+        <div class="col-sm-2">
+            <label class="control-label">@Html.DisplayFor(modelItem => item.StartDate)</label>
+        </div>
+        <div class="col-sm-2">
+            <label class="control-label">
+                @Html.DisplayFor(modelItem => item.applicationuser.Voornaam) -
+                @Html.DisplayFor(modelItem => item.applicationuser.Achternaam)
+        </label>
+    </div>
+        <div class="col-sm-2">
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+ </div>
+</div>
+}*@

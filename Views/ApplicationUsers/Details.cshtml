@@ -1,0 +1,107 @@
+﻿@model ApplicationRequestIt.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>    
+    <form>
+        <hr />
+        <div class="form-group">
+            <label asp-for="Voornaam" class="control-label"></label>
+            <input asp-for="Voornaam" readonly class="form-control" />
+            <span asp-validation-for="Voornaam" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Achternaam" class="control-label"></label>
+            <input asp-for="Achternaam" readonly class="form-control" />
+            <span asp-validation-for="Achternaam" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Klant" class="control-label"></label>
+            <input asp-for="Klant" readonly class="form-control" />
+            <span asp-validation-for="Klant" class="text-danger"></span>
+        </div>      
+
+        <div class="form-group">
+            <label class="control-label">Gebruikersnaam</label>
+            <input asp-for="UserName" readonly class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" readonly class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <div class="switch">
+                <label>
+                    <input disabled asp-for="EmailConfirmed" />
+                    <span class="lever"></span>
+                    Email bevestigd?
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Telefoonnummer</label>
+            <input readonly asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        @*<div class="form-group">
+            <label asp-for="PhoneNumberConfirmed" class="control-label"></label>
+            <input asp-for="PhoneNumberConfirmed" class="form-control" />
+            <span asp-validation-for="PhoneNumberConfirmed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="isBehandelaar" class="control-label"></label>
+            <input asp-for="isBehandelaar" class="form-control" />
+            <span asp-validation-for="isBehandelaar" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="isAdmin" class="control-label"></label>
+            <input asp-for="isAdmin" class="form-control" />
+            <span asp-validation-for="isAdmin" class="text-danger"></span>
+        </div>*@
+        <div class="form-group">
+            <div class="switch">
+                <label>
+                    <input disabled asp-for="PhoneNumberConfirmed" />
+                    <span class="lever"></span>Telefoon bevestigd
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="switch">
+                <label>
+                    <input disabled asp-for="isAdmin" type="checkbox" />
+                    <span class="lever"></span>
+                    @Html.DisplayNameFor(model => model.isAdmin)
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="switch">
+                <label>
+                    <input disabled asp-for="isBehandelaar" type="checkbox" />
+                    <span class="lever"></span>
+                    @Html.DisplayNameFor(model => model.isBehandelaar)
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>
+
+            </label>
+        </div>
+    </form>
+
+</div>
+<div>
+    <a asp-action="Edit" class="btn blue" asp-route-id="@Model.Id">Edit</a> 
+    <a asp-action="Index" class="btn green">Back to List</a>
+    
+    
+</div>

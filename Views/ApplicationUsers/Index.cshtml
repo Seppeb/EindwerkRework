@@ -1,0 +1,201 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<h2>Gebruikerbeheer</h2>
+<div class=" text-right">
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <label>Zoekterm:</label><input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Search" class="btn blue" />
+                <a class="btn green" asp-action="Index">Toon alles</a>
+            </div>
+        </div>
+    </form>
+</div>
+<hr /><br />
+<form>
+    <table class="table card card-body table-condensed table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voornaam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Achternaam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Klant)
+                </th>
+                <th>
+                    Gebruikersnaam
+                </th>
+                <th>
+                    Email Bevestigd
+                </th>
+                <th>
+                    Telefoonnummer
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isAdmin)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isBehandelaar)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.isEnabled == true)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Voornaam)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Achternaam)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Klant)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            <div class="switch">
+                                <label>
+                                    <input disabled asp-for="@item.isAdmin" type="checkbox" />
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="switch">
+                                <label>
+                                    <input disabled asp-for="@item.isBehandelaar" type="checkbox" />
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td>
+                            <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                        </td>
+                        <td>
+                            <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                        </td>
+                        <td>
+                            <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <hr />
+    <p>
+        <a class="btn grey" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Non actieve gebruikers
+        </a>        
+    </p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+       
+            <table class="table  table-condensed table-hover table-responsive">
+                <thead>                                        
+                    <tr>                      
+                        <th>
+                            @Html.DisplayNameFor(model => model.Voornaam)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Achternaam)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Klant)
+                        </th>
+                        <th>
+                            Gebruikersnaam
+                        </th>
+                        <th>
+                            Email Bevestigd
+                        </th>
+                        <th>
+                            Telefoonnummer
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.isAdmin)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.isBehandelaar)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+            {
+                        @if (item.isEnabled == false)
+                {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Voornaam)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Achternaam)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Klant)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                </td>
+                                <td>
+                                    <div class="switch">
+                                        <label>
+                                            <input disabled asp-for="@item.isAdmin" type="checkbox" />
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="switch">
+                                        <label>
+                                            <input disabled asp-for="@item.isBehandelaar" type="checkbox" />
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                                </td>
+                                <td>
+                                    <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                                </td>
+                                <td>
+                                    <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table> 
+            </div>
+        </div>
+</form>

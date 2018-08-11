@@ -1,0 +1,85 @@
+﻿@model ApplicationRequestIt.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Edit";
+}
+<h2>Pas aan</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input asp-for="SecurityStamp" type="hidden"/>
+            <input asp-for="ConcurrencyStamp" type="hidden"/>
+            <input asp-for="PasswordHash" type="hidden" />
+            <input asp-for="Id" type="hidden"  />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Voornaam" class="control-label"></label>
+                <input asp-for="Voornaam" class="form-control" />
+                <span asp-validation-for="Voornaam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Achternaam" class="control-label"></label>
+                <input asp-for="Achternaam" class="form-control" />
+                <span asp-validation-for="Achternaam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Klant" class="control-label"></label>
+                <input asp-for="Klant" class="form-control" />
+                <span asp-validation-for="Klant" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label  class="control-label">Gebruikersnaam</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+           
+            <div class="form-group">
+                <label class="control-label">Telefoonnummer</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">                
+                <div class="switch">
+                    <label>
+                        <input asp-for="PhoneNumberConfirmed" type="checkbox" />
+                        <span class="lever"></span>
+                        Telefoon bevestigd
+                    </label>
+                </div>
+            </div>            
+            <div class="form-group">
+                <div class="switch">
+                    <label >                        
+                        <input asp-for="isAdmin" type="checkbox" />
+                        <span class="lever"></span>
+                        @Html.DisplayNameFor(model => model.isAdmin)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="switch">
+                    <label>                        
+                        <input asp-for="isBehandelaar" type="checkbox" />
+                        <span class="lever"></span>
+                        @Html.DisplayNameFor(model => model.isBehandelaar)
+                    </label>
+                </div>               
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Opslaan" class="btn blue" />
+                <a class="btn green" asp-action="Index">Terug naar overzicht</a>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,164 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.Aanvraag>
+@using ApplicationRequestIt.Utility
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Aanvragen</h2>
+<div>
+    <div class="col">
+        <div class="text-left">
+            <p>
+                <a class="btn blue" asp-action="Create">Nieuwe Aanvraag</a>                
+            </p>
+        </div>
+        <div class=" text-right">
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <div class="row">
+                        <label>Zoekterm:</label><input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                        <input type="submit" value="Filter" class="btn blue" />
+                        <a class="btn green" asp-action="Index">Toon alles</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (Model.Count() == 0)
+{
+    <hr />
+    <div class="text-primary"> Geen Aanvragen of vragen gevonden, voeg een aanvraag toe of stel ons een vraag</div>
+}
+else
+{
+    <table class="table table-responsive table-dark table-condensed table-hover table-striped">
+        <thead class="">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titel)
+                </th>                             
+                <th>
+                    Periode
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Aanmaakdatum)
+                </th>                
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titel)
+                    </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDatum) -                     
+                        @Html.DisplayFor(modelItem => item.EindDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Aanmaakdatum)
+                    </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Naam)
+                    </td>
+                    @if (item.BehandelaarApplicationUser == null)
+                    {
+                        <td>Geen toegewezen</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
+                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
+                        </td>
+                    }
+                    <td>
+                        <a class="btn glyphicon blue glyphicon-edit"  asp-action="Edit" asp-route-id="@item.Id" asp-route-index="true"></a>
+                    </td>
+                    <td>
+                        <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-index="true"></a>
+                    </td>
+                    @if (item.Status.Naam.Equals("Verstuurd") )
+                    {
+                        <td>
+                            <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-index="true"></a>
+
+                        </td>
+
+                    }
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+@*<table class="table table-responsive table-condensed table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Vraag
+                    </th>
+                    <th>
+                       Vraagomschrijving
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDatum)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EindDatum)
+                    </th>
+                    <th>
+                        Gebruiker
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    @if (item.IsVraag == true)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Titel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Omschrijving)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDatum)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EindDatum)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                            </td>
+                            <td>
+                                <a class="btn btn-primary glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-info glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }*@
+
