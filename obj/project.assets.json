@@ -13400,12 +13400,15 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "C:\\Users\\bergh\\Desktop\\Eindwerk\\Eindwerk\\EindwerkRework\\ApplicationRequestIt.csproj",
+      "projectUniqueName": "C:\\Users\\bergh\\Documents\\School\\Eindwerk\\RequestIt\\Eindwerk Seppe Berghmans c1035443\\ApplicationRequestIt\\ApplicationRequestIt\\ApplicationRequestIt.csproj",
       "projectName": "ApplicationRequestIt",
-      "projectPath": "C:\\Users\\bergh\\Desktop\\Eindwerk\\Eindwerk\\EindwerkRework\\ApplicationRequestIt.csproj",
+      "projectPath": "C:\\Users\\bergh\\Documents\\School\\Eindwerk\\RequestIt\\Eindwerk Seppe Berghmans c1035443\\ApplicationRequestIt\\ApplicationRequestIt\\ApplicationRequestIt.csproj",
       "packagesPath": "C:\\Users\\bergh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bergh\\Desktop\\Eindwerk\\Eindwerk\\EindwerkRework\\obj\\",
+      "outputPath": "C:\\Users\\bergh\\Documents\\School\\Eindwerk\\RequestIt\\Eindwerk Seppe Berghmans c1035443\\ApplicationRequestIt\\ApplicationRequestIt\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13435,36 +13438,36 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Bootstrap.v3.Datetimepicker": {
-            "target": "Package",
-            "version": "[4.17.45, )"
-          },
-          "Microsoft.AspNetCore.All": {
-            "target": "Package",
-            "version": "[2.0.0, )"
-          },
           "Microsoft.EntityFrameworkCore.Tools": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2.0.0, )"
-          },
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "[2.0.0, )",
-            "autoReferenced": true
+            "version": "2.0.0"
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2.0.0, )"
+            "version": "2.0.0"
+          },
+          "Bootstrap.v3.Datetimepicker": {
+            "target": "Package",
+            "version": "4.17.45"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "2.0.0",
+            "autoReferenced": true
           },
           "SendGrid": {
             "target": "Package",
-            "version": "[9.9.0, )"
+            "version": "9.9.0"
+          },
+          "Microsoft.AspNetCore.All": {
+            "target": "Package",
+            "version": "2.0.0"
           },
           "bootstrap": {
             "target": "Package",
-            "version": "[4.1.3, )"
+            "version": "4.1.3"
           }
         },
         "imports": [
