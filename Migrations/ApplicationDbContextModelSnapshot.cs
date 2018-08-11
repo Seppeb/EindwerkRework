@@ -27,6 +27,8 @@ namespace ApplicationRequestIt.Migrations
 
                     b.Property<DateTime?>("Aanmaakdatum");
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<string>("BehandelaarId");
 
                     b.Property<DateTime>("EindDatum");
@@ -51,13 +53,26 @@ namespace ApplicationRequestIt.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BehandelaarId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Aanvragen");
+                });
+
+            modelBuilder.Entity("ApplicationRequestIt.Models.AanvraagBehandelaar", b =>
+                {
+                    b.Property<int>("AanvraagId");
+
+                    b.Property<string>("BehandelaarId");
+
+                    b.HasKey("AanvraagId", "BehandelaarId");
+
+                    b.HasIndex("BehandelaarId");
+
+                    b.ToTable("AanvraagBehandelaar");
                 });
 
             modelBuilder.Entity("ApplicationRequestIt.Models.ApplicationUser", b =>
@@ -273,10 +288,9 @@ namespace ApplicationRequestIt.Migrations
 
             modelBuilder.Entity("ApplicationRequestIt.Models.Aanvraag", b =>
                 {
-                    b.HasOne("ApplicationRequestIt.Models.ApplicationUser", "BehandelaarApplicationUser")
+                    b.HasOne("ApplicationRequestIt.Models.ApplicationUser")
                         .WithMany("BehandelaarAanvragen")
-                        .HasForeignKey("BehandelaarId")
-                        .HasConstraintName("FK_Aanvraag_ApplicationUser_Behandelaar");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("ApplicationRequestIt.Models.Status", "Status")
                         .WithMany("Aanvragen")
@@ -287,6 +301,19 @@ namespace ApplicationRequestIt.Migrations
                         .WithMany("CustomerAanvragen")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Aanvraag_ApplicationUser_customer");
+                });
+
+            modelBuilder.Entity("ApplicationRequestIt.Models.AanvraagBehandelaar", b =>
+                {
+                    b.HasOne("ApplicationRequestIt.Models.Aanvraag", "Aanvraag")
+                        .WithMany("AanvraagBehandelaars")
+                        .HasForeignKey("AanvraagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ApplicationRequestIt.Models.ApplicationUser", "Behandelaar")
+                        .WithMany("AanvraagBehandelaars")
+                        .HasForeignKey("BehandelaarId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ApplicationRequestIt.Models.Bericht", b =>

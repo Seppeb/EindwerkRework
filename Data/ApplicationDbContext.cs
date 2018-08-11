@@ -18,18 +18,18 @@ namespace ApplicationRequestIt.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
 
-            //builder.Entity<AanvraagBehandelaar>()
-            //    .HasKey(t => new { t.AanvraagId, t.BehandelaarId });
+            builder.Entity<AanvraagBehandelaar>()
+                .HasKey(t => new { t.AanvraagId, t.BehandelaarId });
 
-            //builder.Entity<AanvraagBehandelaar>()
-            //    .HasOne(ab => ab.Aanvraag)
-            //    .WithMany(p => p.AanvraagBehandelaars)
-            //    .HasForeignKey(ab => ab.AanvraagId);
+            builder.Entity<AanvraagBehandelaar>()
+                .HasOne(ab => ab.Aanvraag)
+                .WithMany(p => p.AanvraagBehandelaars)
+                .HasForeignKey(ab => ab.AanvraagId);
 
-            //builder.Entity<AanvraagBehandelaar>()
-            //   .HasOne(ab => ab.Behandelaar)
-            //   .WithMany(p => p.AanvraagBehandelaars)
-            //   .HasForeignKey(ab => ab.BehandelaarId);
+            builder.Entity<AanvraagBehandelaar>()
+               .HasOne(ab => ab.Behandelaar)
+               .WithMany(p => p.AanvraagBehandelaars)
+               .HasForeignKey(ab => ab.BehandelaarId);
 
 
             builder.Entity<Aanvraag>(entity =>
@@ -39,10 +39,10 @@ namespace ApplicationRequestIt.Data
               .HasForeignKey(d => d.UserId)
               .HasConstraintName("FK_Aanvraag_ApplicationUser_customer");
 
-               entity.HasOne(d => d.BehandelaarApplicationUser)
-               .WithMany(a => a.BehandelaarAanvragen)
-               .HasForeignKey(d => d.BehandelaarId)
-               .HasConstraintName("FK_Aanvraag_ApplicationUser_Behandelaar");
+               //entity.HasOne(d => d.BehandelaarApplicationUser)
+               //.WithMany(a => a.BehandelaarAanvragen)
+               //.HasForeignKey(d => d.BehandelaarId)
+               //.HasConstraintName("FK_Aanvraag_ApplicationUser_Behandelaar");
            });
         }
 

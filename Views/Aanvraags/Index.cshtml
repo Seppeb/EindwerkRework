@@ -48,7 +48,7 @@ else
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                    @Html.DisplayNameFor(model => model.AanvraagBehandelaar)
                 </th>
                 <th></th>
             </tr>
@@ -58,8 +58,6 @@ else
             {
                 @if (item.Status.Naam != "Afgesloten")
                 {
-
-
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Titel)
@@ -74,7 +72,7 @@ else
                         <td>
                             @Html.DisplayFor(modelItem => item.Status.Naam)
                         </td>
-                        @if (item.BehandelaarApplicationUser == null)
+                        @if (item.AanvraagBehandelaars.Count.Equals(0))
                         {
                             <td>Geen toegewezen</td>
                         }

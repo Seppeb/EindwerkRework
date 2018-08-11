@@ -91,7 +91,7 @@ namespace ApplicationRequestIt
             //aanmaak data
             DbInitializer.Initialize(context, serviceProvider).Wait();
 
-            DbInitializer.Aanvragen(context, serviceProvider).Wait();
+            //DbInitializer.Aanvragen(context, serviceProvider).Wait();
             
         }
         //    private async Task CreateUserRoles(IServiceProvider serviceProvider)

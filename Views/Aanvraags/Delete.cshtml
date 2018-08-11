@@ -72,10 +72,13 @@
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <label asp-for="BehandelaarApplicationUser" class="control-label"></label>
+            <label asp-for="AanvraagBehandelaars" class="control-label"></label>
         </div>
         <div class="col-sm-8">
-            <input asp-for="BehandelaarApplicationUser.Voornaam" rows="4" cols="3" readonly class="form-control" />
+            @foreach (var behandelaar in Model.AanvraagBehandelaars)
+            {
+                <label  rows="4" cols="3" readonly class="form-control input" >  @behandelaar.Behandelaar.Voornaam </label>
+            }
         </div>
     </div>
 </div>

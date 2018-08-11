@@ -178,44 +178,44 @@ namespace ApplicationRequestIt.Data
             //    }
             //}
         }
-        public static async Task Aanvragen(ApplicationDbContext context, IServiceProvider serviceProvider)
-        {
+        //public static async Task Aanvragen(ApplicationDbContext context, IServiceProvider serviceProvider)
+        //{
 
-            await context.Database.EnsureCreatedAsync();
+        //    await context.Database.EnsureCreatedAsync();
 
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //    var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             
-            if (!context.Aanvragen.Any())
-            {
-                var Aanvragen = new Aanvraag[]
-             {
-                 new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Koen")),
-                     Titel ="Niewe saus",
-                     BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
-                     StartDatum = new DateTime(2018,08,20), EindDatum = new DateTime(2018,10,20),
-                     StatusId = 3, LinkVoorbeeldKlant = "www.niewesaus.be", LinkVoorbeeldBehandelaar = "www.voorbeeldsaus.be",
-                     Omschrijving ="we hebben een nieuwe saus ontwikkelt in ons assortiment en zouden dit graat laten zien op een signage schermen.",
-                     Aanmaakdatum = DateTime.Now },
+        //    if (!context.Aanvragen.Any())
+        //    {
+        //        var Aanvragen = new Aanvraag[]
+        //     {
+        //         new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Koen")),
+        //             Titel ="Niewe saus",
+        //             BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
+        //             StartDatum = new DateTime(2018,08,20), EindDatum = new DateTime(2018,10,20),
+        //             StatusId = 3, LinkVoorbeeldKlant = "www.niewesaus.be", LinkVoorbeeldBehandelaar = "www.voorbeeldsaus.be",
+        //             Omschrijving ="we hebben een nieuwe saus ontwikkelt in ons assortiment en zouden dit graat laten zien op een signage schermen.",
+        //             Aanmaakdatum = DateTime.Now },
 
-                  new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Koen")), Titel="Promotie op Pita saus",
-                     StartDatum = new DateTime(2018,10,01), EindDatum = new DateTime(2019,02,01), StatusId = 1, LinkVoorbeeldKlant = "www.pitasaus.be",
-                     Omschrijving ="voor onze promotie op onze pita saus willen we graag extra content.", Aanmaakdatum = DateTime.Now.AddDays(20) },
+        //          new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Koen")), Titel="Promotie op Pita saus",
+        //             StartDatum = new DateTime(2018,10,01), EindDatum = new DateTime(2019,02,01), StatusId = 1, LinkVoorbeeldKlant = "www.pitasaus.be",
+        //             Omschrijving ="voor onze promotie op onze pita saus willen we graag extra content.", Aanmaakdatum = DateTime.Now.AddDays(20) },
 
-                   new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("pieter")), Titel="Wintercollectie", BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
-                     StartDatum = new DateTime(2018,07,20), EindDatum = new DateTime(2019,02,20), StatusId = 2, LinkVoorbeeldKlant = "www.wintercollectietorfs.be", LinkVoorbeeldBehandelaar = "www.wintercollectiefinal.be",
-                     Omschrijving ="er komt een wintercollectie aan die we in de kijker willen zetten, kijk link voor welke", Aanmaakdatum = DateTime.Now.AddDays(10) },
+        //           new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("pieter")), Titel="Wintercollectie", BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
+        //             StartDatum = new DateTime(2018,07,20), EindDatum = new DateTime(2019,02,20), StatusId = 2, LinkVoorbeeldKlant = "www.wintercollectietorfs.be", LinkVoorbeeldBehandelaar = "www.wintercollectiefinal.be",
+        //             Omschrijving ="er komt een wintercollectie aan die we in de kijker willen zetten, kijk link voor welke", Aanmaakdatum = DateTime.Now.AddDays(10) },
 
-                    new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("pieter")), Titel="Niewe mannenmode", BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
-                     StartDatum = new DateTime(2018,05,10), EindDatum = new DateTime(2018,10,20), StatusId = 4, LinkVoorbeeldKlant = "www.mannenmodetorfs.be", LinkVoorbeeldBehandelaar = "www.mannenmodevoorbeeld.be",
-                     Omschrijving ="onze mannamode collectie is vernieuwe en willen we in de kijker zetten", Aanmaakdatum = DateTime.Now.AddDays(12) },
-             };
-                foreach (Aanvraag s in Aanvragen)
-                {
-                    context.Aanvragen.Add(s);
-                }
-            }            
-            await context.SaveChangesAsync();
-        }
+        //            new Aanvraag { ApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("pieter")), Titel="Niewe mannenmode", BehandelaarApplicationUser = UserManager.Users.Single(s => s.Voornaam.Equals("Felix")),
+        //             StartDatum = new DateTime(2018,05,10), EindDatum = new DateTime(2018,10,20), StatusId = 4, LinkVoorbeeldKlant = "www.mannenmodetorfs.be", LinkVoorbeeldBehandelaar = "www.mannenmodevoorbeeld.be",
+        //             Omschrijving ="onze mannamode collectie is vernieuwe en willen we in de kijker zetten", Aanmaakdatum = DateTime.Now.AddDays(12) },
+        //     };
+        //        foreach (Aanvraag s in Aanvragen)
+        //        {
+        //            context.Aanvragen.Add(s);
+        //        }
+        //    }            
+        //    await context.SaveChangesAsync();
+        //}
     }
 }

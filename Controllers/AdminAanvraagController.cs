@@ -29,7 +29,7 @@ namespace ApplicationRequestIt.Controllers
             var lijstaanvragen = _context.Aanvragen
                 .Include(a => a.ApplicationUser)
                 .Include(a => a.Status)
-                .Include(a => a.BehandelaarApplicationUser);
+                .Include(a => a.AanvraagBehandelaars);
             return View(await lijstaanvragen.ToListAsync());
         }
 
@@ -43,7 +43,7 @@ namespace ApplicationRequestIt.Controllers
 
             var lijstaanvragen = _context.Aanvragen
                 .Include(a => a.ApplicationUser)
-                .Include(a => a.BehandelaarApplicationUser)
+                .Include(a => a.AanvraagBehandelaars)
                 .Include(a => a.Status)
                 .Where(a => a.BehandelaarId == userId);
             return View(await lijstaanvragen.ToListAsync());

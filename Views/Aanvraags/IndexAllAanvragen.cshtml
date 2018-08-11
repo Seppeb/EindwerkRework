@@ -41,7 +41,7 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                behandelaar
             </th>
             <th></th>
         </tr>
@@ -73,16 +73,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Naam)
             </td>
-            @if (item.BehandelaarApplicationUser == null)
+            @if (item.AanvraagBehandelaars.Count.Equals(null))
             {
             <td>Geen toegewezen</td>
             }
             else
             {
-        <td>
-            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
-            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
-        </td>
+                <td>
+                    @foreach (var behandelaar in item.AanvraagBehandelaars)
+                    {
+                        @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam) 
+                        <label> </label>
+                        @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
+                    }
+                </td>
+           
             }
             <td>
                 <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
@@ -132,7 +137,7 @@
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                    @Html.DisplayNameFor(model => model.AanvraagBehandelaars)
                 </th>
                 <th></th>
             </tr>
@@ -166,17 +171,23 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Status.Naam)
                     </td>
-                    @if (item.BehandelaarApplicationUser == null)
-                    {
-                        <td>Geen toegewezen</td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
-                            @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
-                        </td>
-                    }
+                   @if (item.AanvraagBehandelaars.Count.Equals(0))
+                   {
+                    <td>Geen toegewezen</td>
+                   }
+                   else
+                   {
+                    <td>
+                        @foreach (var behandelaar in item.AanvraagBehandelaars)
+                        {
+                            @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam)
+                            <label> </label>
+                            @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
+
+                        }
+                    </td>
+
+                   }
                     <td>
                         <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
                     </td>

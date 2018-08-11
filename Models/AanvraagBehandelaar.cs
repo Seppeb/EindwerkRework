@@ -10,11 +10,11 @@ namespace ApplicationRequestIt.Models
 
         //tussentabbel om meer op meer relatie te maken tussen behandelaars en aanvragen
 
-        //public int AanvraagId { get; set; }
-        //public Aanvraag Aanvraag { get; set; }
+        public int AanvraagId { get; set; }
+        public Aanvraag Aanvraag { get; set; }
 
-        //public int BehandelaarId { get; set; }
-        //public ApplicationUser Behandelaar { get; set; }
+        public string BehandelaarId { get; set; }
+        public ApplicationUser Behandelaar { get; set; }
 
 
     }

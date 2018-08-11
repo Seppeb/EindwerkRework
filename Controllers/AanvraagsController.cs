@@ -46,7 +46,7 @@ namespace ApplicationRequestIt.Controllers
             var applicationDbContext = from s in _context.Aanvragen.Where(u => u.UserId == userId)
                 .Include(a => a.ApplicationUser)
                 .Include(a => a.Status)
-                .Include(a => a.BehandelaarApplicationUser)                
+                .Include(a => a.AanvraagBehandelaars).ThenInclude(s => s.Behandelaar)                
                                        select s;
 
 
@@ -83,7 +83,8 @@ namespace ApplicationRequestIt.Controllers
             var lijstaanvragen = from a in _context.Aanvragen
                .Include(a => a.ApplicationUser)
                .Include(a => a.Status)
-               .Include(a => a.BehandelaarApplicationUser)
+               .Include(ab => ab.AanvraagBehandelaars)
+               .ThenInclude(ab=>ab.Behandelaar)
                .OrderBy(a => a.ApplicationUser.UserName)
                                  select a;
             //sort           
@@ -119,7 +120,7 @@ namespace ApplicationRequestIt.Controllers
 
             var lijstaanvragen = _context.Aanvragen
                 .Include(a => a.ApplicationUser)
-                .Include(a => a.BehandelaarApplicationUser)
+                .Include(a => a.AanvraagBehandelaars)
                 .Include(a => a.Status)
                 .Where(a => a.BehandelaarId == userId);
             return View(await lijstaanvragen.ToListAsync());
@@ -151,7 +152,8 @@ namespace ApplicationRequestIt.Controllers
             var aanvraag = await _context.Aanvragen
                             .Include(a => a.ApplicationUser)
                             .Include(a => a.Status)
-                            .Include(a => a.BehandelaarApplicationUser)
+                            .Include(a => a.AanvraagBehandelaars)
+                            .ThenInclude(s => s.Behandelaar)
                             .Include(a => a.Berichten)
                             .SingleOrDefaultAsync(m => m.Id == id);
 
@@ -347,7 +349,8 @@ namespace ApplicationRequestIt.Controllers
 
             var aanvraag = await _context.Aanvragen
                 .Include(a => a.ApplicationUser)
-                .Include(a => a.BehandelaarApplicationUser)
+                .Include(a => a.AanvraagBehandelaars)
+                .ThenInclude(s => s.Behandelaar)
                 .Include(a => a.Status)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (aanvraag == null)
