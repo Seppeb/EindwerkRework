@@ -46,7 +46,7 @@ namespace ApplicationRequestIt.Controllers
             var applicationDbContext = from s in _context.Aanvragen.Where(u => u.UserId == userId)
                 .Include(a => a.ApplicationUser)
                 .Include(a => a.Status)
-                .Include(a => a.BehandelaarApplicationUser)
+                .Include(a => a.BehandelaarApplicationUser)                
                                        select s;
 
 
