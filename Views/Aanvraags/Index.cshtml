@@ -48,7 +48,7 @@ else
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AanvraagBehandelaar)
+                    @Html.DisplayNameFor(model => model.AanvraagBehandelaars)
                 </th>
                 <th></th>
             </tr>
@@ -56,7 +56,7 @@ else
         <tbody>
             @foreach (var item in Model)
             {
-                @if (item.Status.Naam != "Afgesloten")
+                @if (item.Status.Naam != "Afgesloten" )
                 {
                     <tr>
                         <td>
@@ -78,10 +78,15 @@ else
                         }
                         else
                         {
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
-                                @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
-                            </td>
+                            @foreach (var behandelaar in item.AanvraagBehandelaars)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam) 
+                                    <label> </label>
+                                    @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
+                                </td>
+                            }
+                           
                         }
                         <td>
                             <a class="btn glyphicon blue glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-index="true"></a>
@@ -89,14 +94,22 @@ else
                         <td>
                             <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-index="true"></a>
                         </td>
-                        @if (item.Status.Naam.Equals("Verstuurd"))
-                        {
-                            <td>
-                                <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-index="true"></a>
+                        
+                            @if (item.Status.Naam.Equals("Verstuurd") || !User.IsInRole(SD.AdminBehandelaar))
+                            {
+                                @*<td>
+                                    <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-index="true"></a>
 
-                            </td>
+                                </td>*@
 
-                        }
+                            }
+                            else if (User.IsInRole(SD.AdminEndUser) && User.IsInRole(SD.BehandelaarEndUser))
+                            {
+                                @*<td>
+                                    <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-index="true"></a>
+
+                                </td>*@
+                            }                      
 
                     </tr>
                 }
@@ -128,7 +141,7 @@ else
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.BehandelaarApplicationUser)
+                        @Html.DisplayNameFor(model => model.AanvraagBehandelaars)
                     </th>
                     <th></th>
                 </tr>
@@ -154,17 +167,22 @@ else
                         <td>
                             @Html.DisplayFor(modelItem => item.Status.Naam)
                         </td>
-                        @if (item.BehandelaarApplicationUser == null)
+                       @if (item.AanvraagBehandelaars.Count.Equals(0))
                         {
-                            <td>Geen toegewezen</td>
-                        }
-                        else
-                        {
+                        <td>Geen toegewezen</td>
+                       }
+                       else
+                       {
+                        @foreach (var behandelaar in item.AanvraagBehandelaars)
+                            {
                             <td>
-                                @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Voornaam) -
-                                @Html.DisplayFor(modelItem => item.BehandelaarApplicationUser.Achternaam)
+                                @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam)
+                                <label> </label>
+                                @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
                             </td>
                         }
+
+                       }
                         <td>
                             <a class="btn glyphicon blue glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id" asp-route-index="true"></a>
                         </td>
@@ -173,10 +191,10 @@ else
                         </td>
                         @if (item.Status.Naam.Equals("Verstuurd"))
                         {
-                            <td>
+                            @*<td>
                                 <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-index="true"></a>
 
-                            </td>
+                            </td>*@
 
                         }
 

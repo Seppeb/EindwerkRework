@@ -12,11 +12,7 @@ namespace ApplicationRequestIt.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
-
+            base.OnModelCreating(builder);          
 
             builder.Entity<AanvraagBehandelaar>()
                 .HasKey(t => new { t.AanvraagId, t.BehandelaarId });
@@ -37,12 +33,7 @@ namespace ApplicationRequestIt.Data
                entity.HasOne(d => d.ApplicationUser)
               .WithMany(a => a.CustomerAanvragen)
               .HasForeignKey(d => d.UserId)
-              .HasConstraintName("FK_Aanvraag_ApplicationUser_customer");
-
-               //entity.HasOne(d => d.BehandelaarApplicationUser)
-               //.WithMany(a => a.BehandelaarAanvragen)
-               //.HasForeignKey(d => d.BehandelaarId)
-               //.HasConstraintName("FK_Aanvraag_ApplicationUser_Behandelaar");
+              .HasConstraintName("FK_Aanvraag_ApplicationUser_customer");               
            });
         }
 
@@ -50,6 +41,9 @@ namespace ApplicationRequestIt.Data
         public DbSet<Bericht> Berichten { get; set; }
         public DbSet<Status> Statussen { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
+        public DbSet<AanvraagGeschiedenis> AanvraagGeschiedenis { get; set; }
+
 
     }
 }

@@ -108,7 +108,7 @@ else if (Model.isEnabled == false)
         </div>
 
 
-        @if (Model.CustomerAanvragen.Count == 0 && Model.BehandelaarAanvragen.Count == 0)
+        @if (!ViewBag.heeftAanvragen)
         {
             @if (Model.isEnabled == true)
             {
@@ -122,9 +122,9 @@ else if (Model.isEnabled == false)
             
         }
         else
-        {
-            <label>De gebruiker heeft nog aanvragen gelieve deze eerst te behandelen</label>
-        }
+        {<br/><hr />
+            <label>De gebruiker kan niet op ontactief gezet worden, dit kan zijn omdat hij nog aanvragen heeft of hij momenteel ingelogd is.</label>
+        }       
         <a class="btn green" asp-action="Index">Terug naar overzicht</a>
     </form>
 </div>

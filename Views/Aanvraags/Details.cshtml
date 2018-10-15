@@ -5,6 +5,10 @@
     ViewData["Title"] = "Details";
 }
 
+
+@{ 
+    var behandelaars = Model.aanvraag.AanvraagBehandelaars;
+}
 <h2>Details</h2>
 
 <div>
@@ -67,7 +71,7 @@
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <label asp-for="aanvraag.Status.Naam" class="control-label"></label>
+            <label class="control-label">Status</label>
         </div>
         <div class="col-sm-8">
             <input asp-for="aanvraag.Status.Naam" rows="4" cols="3" readonly class="form-control" />
@@ -78,36 +82,48 @@
             <label asp-for="aanvraag.AanvraagBehandelaars" class="control-label"></label>
         </div>
         <div class="col-sm-8">
-            @foreach (var behandelaar in )
+            @foreach (var behandelaar in behandelaars)
             {
-                <input asp-for="behandelaar.voornaam" rows="4" cols="3" readonly class="form-control" />
-
-            }
-            <input asp-for="aanvraag.AanvraagBehandelaars.Voornaam" rows="4" cols="3" readonly class="form-control" />
+                <label class="form-control">
+                    @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam)
+                    <label> </label>
+                    @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
+                </label>
+            }            
         </div>
     </div>
     
 </div>
 
 <div>
+    <a class="btn grey" asp-action="Index" asp-controller="AanvraagGeschiedenis" asp-route-id="@Model.aanvraag.Id" asp-route-isAlles="@ViewBag.isAlles" asp-route-index="@ViewBag.index" asp-route-isToegezen="@ViewBag.isToegezen">Geschiedenis</a>
+
     <a class="btn blue" asp-action="Edit" asp-route-id="@Model.aanvraag.Id" asp-route-isAlles="@ViewBag.isAlles" asp-route-index="@ViewBag.index" asp-route-isToegezen="@ViewBag.isToegezen">Pas aan</a>
     @if (ViewBag.IsAlles == true)
     {
-        <a asp-action="IndexAllAanvragen" asp-controller="Aanvraags" class="btn green">Back to List</a>
+        <a asp-action="IndexAllAanvragen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
     }
     else if (ViewBag.index == true)
     {
-        <a asp-action="Index" asp-controller="Aanvraags" class="btn green">Back to List</a>
+        <a asp-action="Index" asp-controller="Aanvraags" class="btn green"L>Terug naar overzicht</a>
 
     }
     else if (ViewBag.isToegezen == true)
     {
-        <a asp-action="IndexToegewezen" asp-controller="Aanvraags" class="btn green">Back to List</a>
+        <a asp-action="IndexToegewezen" asp-controller="Aanvraags" class="btn green">Terug naar overzicht</a>
     }
 </div>
 <br />
 
-<h4>Stel ons een vraag</h4>
+@if (User.IsInRole(SD.BehandelaarEndUser) || User.IsInRole(SD.AdminEndUser))
+{
+    <h4>Communicatie met de klant</h4>
+}
+else if (User.IsInRole(SD.CustomerEndUser))
+{
+    <h4>Stel ons een vraag</h4>
+}
+
 <hr />
 @foreach (var bericht in Model.berichten)
 {
@@ -149,7 +165,15 @@
     @*<input asp-for="bericht.applicationuserId" value="@Model.aanvraag.UserId" type="hidden" />*@
     <input asp-for="bericht.AanvraagId" value="@Model.aanvraag.Id" type="hidden" />
     <div class="row">
-        <input type="submit" value="Stel vraag" class="btn blue" />
+        @if (User.IsInRole(SD.BehandelaarEndUser) || User.IsInRole(SD.AdminEndUser))
+        {
+            <input type="submit" value="Stuur bericht" class="btn blue" />
+        }
+        else if (User.IsInRole(SD.CustomerEndUser))
+        {
+            <input type="submit" value="Stuur bericht" class="btn blue" />
+        }
+       
     </div>
 </form>
 <br />

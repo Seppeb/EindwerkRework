@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationRequestIt.Models.Aanvraag>
+﻿@model IEnumerable<ApplicationRequestIt.Models.AanvraagBehandelaar>
 @{
     ViewData["Title"] = "IndexToegewezen";
 }
@@ -17,7 +17,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Titel)
+                @Html.DisplayNameFor(model => model.Aanvraag.Titel)
             </th>            
             <th>
                 Gebruiker
@@ -26,13 +26,13 @@
                Periode
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+                @Html.DisplayNameFor(model => model.Aanvraag.LinkVoorbeeldKlant)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+                @Html.DisplayNameFor(model => model.Aanvraag.LinkVoorbeeldBehandelaar)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.Aanvraag.Status)
             </th>
             
 
@@ -42,37 +42,37 @@
     <tbody>
         @foreach (var item in Model)
             {
-            @if (item.IsVraag != true && item.Status.Naam != "Afgesloten")
+            @if (item.Aanvraag.IsVraag != true && item.Aanvraag.Status.Naam != "Afgesloten")
                 {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Titel)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.Titel)
                     </td>                    
                     <td>
-                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.ApplicationUser.UserName)
                     </td>                    
                     <td>
-                        @Html.DisplayFor(modelItem => item.StartDatum) -                     
-                        @Html.DisplayFor(modelItem => item.EindDatum)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.StartDatum) -                     
+                        @Html.DisplayFor(modelItem => item.Aanvraag.EindDatum)
                     </td>
                     <td class="btn-link">
-                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.LinkVoorbeeldKlant)
                     </td>
                     <td class="btn-link">
-                        @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.LinkVoorbeeldBehandelaar)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.Naam)
+                        @Html.DisplayFor(modelItem => item.Aanvraag.Status.Naam)
                     </td>
                     <td>
-                        <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                        <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Aanvraag.Id"  asp-route-isToegezen="true"></a>
                     </td>
                     <td>
-                        <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                        <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Aanvraag.Id"  asp-route-isToegezen="true"></a>
                     </td>
-                    <td>
-                        <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
-                    </td>
+                    @*<td>
+                        <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Aanvraag.Id"></a>
+                    </td>*@
                 </tr>
             }
         }
@@ -91,7 +91,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Titel)
+                    @Html.DisplayNameFor(model => model.Aanvraag.Titel)
                 </th>
                 <th>
                     Gebruiker
@@ -100,13 +100,13 @@
                     Periode
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
+                    @Html.DisplayNameFor(model => model.Aanvraag.LinkVoorbeeldKlant)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
+                    @Html.DisplayNameFor(model => model.Aanvraag.LinkVoorbeeldBehandelaar)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status)
+                    @Html.DisplayNameFor(model => model.Aanvraag.Status)
                 </th>
 
 
@@ -116,37 +116,37 @@
         <tbody>
             @foreach (var item in Model)
             {
-                @if (item.IsVraag != true && item.Status.Naam == "Afgesloten")
+                @if (item.Aanvraag.IsVraag != true && item.Aanvraag.Status.Naam == "Afgesloten")
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Titel)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.Titel)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.ApplicationUser.UserName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.StartDatum) -
-                            @Html.DisplayFor(modelItem => item.EindDatum)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.StartDatum) -
+                            @Html.DisplayFor(modelItem => item.Aanvraag.EindDatum)
                         </td>
                         <td class="btn-link">
-                            @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.LinkVoorbeeldKlant)
                         </td>
                         <td class="btn-link">
-                            @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.LinkVoorbeeldBehandelaar)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Status.Naam)
+                            @Html.DisplayFor(modelItem => item.Aanvraag.Status.Naam)
                         </td>
                         <td>
-                            <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            <a class="btn blue glyphicon glyphicon-edit" asp-action="Edit" asp-route-id="@item.Aanvraag.Id" asp-route-isToegezen="true"></a>
                         </td>
                         <td>
-                            <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id"></a>
+                            <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Aanvraag.Id" asp-route-isToegezen="true"></a>
                         </td>
-                        <td>
-                            <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
-                        </td>
+                        @*<td>
+                            <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Aanvraag.Id" asp-route-isToegezen="true" ></a>
+                        </td>*@
                     </tr>
                 }
             }

@@ -10,6 +10,8 @@
             <input asp-for="SecurityStamp" type="hidden" />
             <input asp-for="ConcurrencyStamp" type="hidden" />
             <input asp-for="PasswordHash" type="hidden" />
+            <input asp-for="EmailConfirmed" type="hidden" />
+
             <input asp-for="isEnabled" type="hidden" />
 
             <input asp-for="Id" type="hidden" />
@@ -48,17 +50,10 @@
                 <label class="control-label">Telefoonnummer</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
+            </div>    
+            
             <div class="form-group">
-                <div class="switch">
-                    <label>
-                        <input asp-for="PhoneNumberConfirmed" type="checkbox" />
-                        <span class="lever"></span>
-                        Telefoon bevestigd
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
+                <label class="control-label">Toegewezen rollen</label>
                 <div class="switch">
                     <label>
                         <input asp-for="isAdmin" type="checkbox" />
@@ -67,15 +62,36 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="switch">
-                    <label>
-                        <input asp-for="isBehandelaar" type="checkbox" />
-                        <span class="lever"></span>
-                        @Html.DisplayNameFor(model => model.isBehandelaar)
-                    </label>
+            @if (ViewBag.heeftAanvragen)
+            {
+                <div class="form-group">
+
+                    <div class="switch">
+                        <label>
+                            <input asp-for="isBehandelaar" disabled type="checkbox" />
+                            <span class="lever"></span>
+                            @Html.DisplayNameFor(model => model.isBehandelaar)
+                            
+                        </label>
+                        <label>Behandelaar heeft nog toegewezen aanvragen</label>
+                    </div>
+                    
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="switch">
+                        <label>
+                            <input asp-for="isBehandelaar" type="checkbox" />
+                            <span class="lever"></span>
+                            @Html.DisplayNameFor(model => model.isBehandelaar)
+                        </label>
+                    </div>
+                </div>
+            }
+
+            
 
             <div class="form-group">
                 <input type="submit" value="Opslaan" class="btn blue" />

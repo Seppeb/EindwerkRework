@@ -39,21 +39,13 @@ namespace ApplicationRequestIt.Models
 
         public bool IsVraag { get; set; }
 
-        //Relaties met users
-               
+        //Relaties met users               
         public string UserId { get; set; }
         public string BehandelaarId { get; set; }
 
         [ForeignKey("UserId")]
         [DisplayName("Gebruiker")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-
-        //relatie met behandelaar
-        //[ForeignKey("BehandelaarId")]
-        //[DisplayName("Behandelaar")]
-        //public virtual ApplicationUser BehandelaarApplicationUser { get; set; }
-
-
+        public virtual ApplicationUser ApplicationUser { get; set; }     
         //relatie met Status
         public int StatusId { get; set; }
         [ForeignKey("StatusId")]
@@ -64,6 +56,10 @@ namespace ApplicationRequestIt.Models
         //erbij om relatie met behandelaar te maken meer op meer
         [DisplayName("Behandelaars")]
         public ICollection<AanvraagBehandelaar> AanvraagBehandelaars { get; set; }
+
+        //relatie met aanvraaggeschiedenis
+        public ICollection<AanvraagGeschiedenis> AanvraagGeschiedenis { get; set; }
+
 
 
     }

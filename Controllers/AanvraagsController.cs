@@ -11,6 +11,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using ApplicationRequestIt.Utility;
 using ApplicationRequestIt.Models.AanvraagsBerichtenViewmodel;
+using ApplicationRequestIt.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ApplicationRequestIt.Controllers
 {
@@ -21,12 +24,17 @@ namespace ApplicationRequestIt.Controllers
         public bool IsIndexallaanvragen;
         public bool IsIndex;
         public bool IsIndexToegewezen;
+        public string Email { get; set; }
 
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AanvraagsController(ApplicationDbContext context)
+        public AanvraagsController(ApplicationDbContext context, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
+            _emailSender = emailSender;
         }
 
         // GET: Aanvraags
@@ -43,24 +51,31 @@ namespace ApplicationRequestIt.Controllers
             {
                 userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
-            var applicationDbContext = from s in _context.Aanvragen.Where(u => u.UserId == userId)
+
+           // aanvragen van de user met behandelaar 
+            var Aanvragen = from s in _context.Aanvragen.Where(u => u.UserId == userId)
                 .Include(a => a.ApplicationUser)
                 .Include(a => a.Status)
-                .Include(a => a.AanvraagBehandelaars).ThenInclude(s => s.Behandelaar)                
+                .Include(a => a.AanvraagBehandelaars).ThenInclude(s => s.Behandelaar)              
                                        select s;
+            // toegewezen behandelaars
+            var toegewezenBehandelaars = _context.AanvraagBehandelaars.Include(s => s.Behandelaar).ThenInclude(s=>s.Voornaam + s.Achternaam);
 
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                applicationDbContext = applicationDbContext
-                    .Where(s => s.ApplicationUser.Voornaam.Contains(searchString) ||
-                    s.ApplicationUser.Achternaam.Contains(searchString) ||
-                    s.Titel.Contains(searchString) ||
-                    s.Omschrijving.Contains(searchString) ||
-                    s.Status.Naam.Contains(searchString));
+                Aanvragen = Aanvragen
+                    .Where(
+                    s => s.ApplicationUser.Voornaam.Contains(searchString)
+                    || s.ApplicationUser.Achternaam.Contains(searchString)
+                    || s.Titel.Contains(searchString)
+                    || s.Omschrijving.Contains(searchString)
+                    || s.Status.Naam.Contains(searchString)
+                                        ); 
+                 
             }
 
-            return View(await applicationDbContext.ToListAsync());
+            return View(await Aanvragen.ToListAsync());
         }
 
         //Get : Aanvraags
@@ -84,7 +99,7 @@ namespace ApplicationRequestIt.Controllers
                .Include(a => a.ApplicationUser)
                .Include(a => a.Status)
                .Include(ab => ab.AanvraagBehandelaars)
-               .ThenInclude(ab=>ab.Behandelaar)
+               .ThenInclude(ab => ab.Behandelaar)
                .OrderBy(a => a.ApplicationUser.UserName)
                                  select a;
             //sort           
@@ -92,7 +107,7 @@ namespace ApplicationRequestIt.Controllers
             //search
             if (!string.IsNullOrEmpty(searchString))
             {
-                lijstaanvragen = lijstaanvragen
+                lijstaanvragen = lijstaanvragen                    
                     .Where(
                        s => s.ApplicationUser.Voornaam.Contains(searchString)
                     || s.ApplicationUser.Achternaam.Contains(searchString)
@@ -100,11 +115,13 @@ namespace ApplicationRequestIt.Controllers
                     || s.Omschrijving.Contains(searchString)
                     || s.ApplicationUser.UserName.Contains(searchString)
                     || s.ApplicationUser.Email.Contains(searchString)
+                    //|| s.AanvraagBehandelaars.SelectMany(searchString)
                     || s.Status.Naam.Contains(searchString));
             }
 
             return View(await lijstaanvragen.ToListAsync());
         }
+        
         // Get: Aanvraags
         [Authorize(Roles = SD.AdminBehandelaar)]
         public async Task<IActionResult> IndexToegewezen(string userId)
@@ -118,25 +135,29 @@ namespace ApplicationRequestIt.Controllers
                 userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            var lijstaanvragen = _context.Aanvragen
-                .Include(a => a.ApplicationUser)
-                .Include(a => a.AanvraagBehandelaars)
-                .Include(a => a.Status)
-                .Where(a => a.BehandelaarId == userId);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var aanvraagbehandelaarslist = _context.AanvraagBehandelaars.ToListAsync();
+
+            var lijstaanvragen = _context.AanvraagBehandelaars
+                .Where(a => a.BehandelaarId == userId)
+                .Include(a => a.Aanvraag)
+                .ThenInclude(a => a.ApplicationUser)
+                .Include(a => a.Aanvraag).ThenInclude(a => a.Status)
+                .Include(ab => ab.Behandelaar);
+                              
+                
+                //.FirstOrDefault(a => a.AanvraagBehandelaars.Behandelaar.BehandelaarId == userId);
+            //var toegewezenAanvragen = lijstaanvragen);
             return View(await lijstaanvragen.ToListAsync());
         }
-
-
 
         // GET: Aanvraags/Details/5
         public async Task<IActionResult> Details(int? id, bool index, bool isAlles, bool isToegezen)
         {
-
-
             ViewBag.index = index;
             ViewBag.isAlles = isAlles;
             ViewBag.isToegezen = isToegezen;
-
 
             if (id == null)
             {
@@ -145,7 +166,6 @@ namespace ApplicationRequestIt.Controllers
 
             return await AanvraagberichtenViewmodel(id);
         }
-
 
         private async Task<IActionResult> AanvraagberichtenViewmodel(int? id)
         {
@@ -160,8 +180,7 @@ namespace ApplicationRequestIt.Controllers
             var berichten = await _context.Berichten
                 .Where(a => a.AanvraagId.Equals(id))
                 .Include(a => a.applicationuser)
-                .ToListAsync();
-
+                .ToListAsync();  
 
             if (aanvraag == null)
             {
@@ -171,7 +190,7 @@ namespace ApplicationRequestIt.Controllers
             var model = new AanvraagBerichtenViewmodel
             {
                 aanvraag = aanvraag,
-                berichten = berichten
+                berichten = berichten,
             };
 
             return View(model);
@@ -180,16 +199,53 @@ namespace ApplicationRequestIt.Controllers
         //post
         public async Task<IActionResult> AddBericht(Bericht bericht)
         {
+            
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            
+
 
             bericht.applicationuserId = userId;
-
-
             int aanvraagId = bericht.AanvraagId;
+            var aanvraag = _context.Aanvragen.Where(x => x.Id == aanvraagId).Include(a=>a.ApplicationUser).SingleOrDefault();
+            var status = await _context.Statussen.Where(s => s.Id.Equals(aanvraag.StatusId)).FirstOrDefaultAsync();
+
+            var behandelaar = _context.Users.Where(x => x.Id == bericht.applicationuserId).SingleOrDefault();
+
             if (ModelState.IsValid)
             {
+                var aanmaak = new AanvraagGeschiedenis
+                {
+                    AanvraagId = aanvraag.Id,
+                    Aanvraag = aanvraag,
+                    Actie = "Bericht toegevoegd aan de aanvraag : " + bericht.Inhoud,
+                    time = DateTime.Now,
+                    Voornaam = user.Voornaam,
+                    Achternaam = user.Achternaam,
+                    Status = status.Naam
+                };
+                _context.AanvraagGeschiedenis.Add(aanmaak);
                 _context.Add(bericht);
                 await _context.SaveChangesAsync();
+
+               
+
+                // dat user van aanvraag zelf bericht plaatst
+                if (bericht.applicationuser.Email == aanvraag.ApplicationUser.Email)
+                {
+                    //mail naar user dat bericht geplaatst is
+                    await _emailSender.SendEmailAsync(user.Email, "Bericht voor aanvraag: " + aanvraag.Titel, $"Je bericht: " + bericht.Inhoud + " is succesvol geplaatst, de behandelaars zullen je zo spoedig mogelijk helpen.");
+                    //moet nog komen, mail naar behandelaar dat user bericht heeft geplaatst
+                }
+                //dat gebruiker bericht plaatst
+                else if(bericht.applicationuser.Email != aanvraag.ApplicationUser.Email)
+                {
+                    //mail naar user als behandelaar bericht plaatst
+                    await _emailSender.SendEmailAsync(aanvraag.ApplicationUser.Email, "Nieuw bericht voor aanvraag: " + aanvraag.Titel, $"De behandelaar: " + behandelaar.Voornaam + " " + behandelaar.Achternaam + " heeft het bericht met inhoud: " + bericht.Inhoud + " geplaatst, meer info vindt je terug in de details van je aanvraag.");
+                    //mail naar behandelaar dat bericht goed geplaatst is
+                    await _emailSender.SendEmailAsync(user.Email, "Bericht voor aanvraag: " + aanvraag.Titel, $"Je bericht: " + bericht.Inhoud + " is succesvol geplaatst.");
+
+                }
                 return RedirectToAction("Details", "Aanvraags", new { id = aanvraagId });
             }
 
@@ -199,11 +255,9 @@ namespace ApplicationRequestIt.Controllers
         // GET: Aanvraags/Create
         public IActionResult Create(bool isVraag, string UserId, bool index, bool isAlles, bool isToegezen)
         {
-
             //ViewBag.index = index;
             //ViewBag.isAlles = isAlles;
             //ViewBag.isToegezen = isToegezen;
-
             Aanvraag aanvraag;
 
             if (UserId == null)
@@ -216,7 +270,6 @@ namespace ApplicationRequestIt.Controllers
                 IsVraag = true,
                 UserId = UserId               
             };
-
             //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Voornaam");
             //ViewData["StatusId"] = new SelectList(_context.Statussen, "Id", "Naam");
             return View(aanvraag);
@@ -229,10 +282,32 @@ namespace ApplicationRequestIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Aanvraag aanvraag)
         {
+            
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            var status = await _context.Statussen.Where(s => s.Id.Equals(aanvraag.StatusId)).FirstOrDefaultAsync();
+
+
             if (ModelState.IsValid)
             {
-                _context.Add(aanvraag);
+
+                var aanmaak = new AanvraagGeschiedenis
+                {
+                    AanvraagId = aanvraag.Id,
+                    Aanvraag = aanvraag,
+                    Actie = "Aanmaak van de aanvraag",
+                    time = DateTime.Now,
+                    Voornaam = user.Voornaam,
+                    Achternaam = user.Achternaam,
+                    Status = status.Naam
+                };
+
+                _context.AanvraagGeschiedenis.Add(aanmaak);
+                _context.Add(aanvraag);             
                 await _context.SaveChangesAsync();
+                await _emailSender.SendEmailAsync(user.Email, "Aanmaak Gelukt", $"Het aanmaken van de aanvraag:  " + aanvraag.Titel + " is gelukt.");
+
+
                 if (IsIndex)
                 {
                     return RedirectToAction(nameof(Index));
@@ -250,15 +325,168 @@ namespace ApplicationRequestIt.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", aanvraag.UserId);
             ViewData["StatusId"] = new SelectList(_context.Statussen, "Id", "Id", aanvraag.StatusId);
             return View(aanvraag);
+        }    
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveBehandelaar(int id, Aanvraag aanvraag, bool index, bool isAlles, bool isToegezen, string bid)
+        {
+            //ViewBag.behandelaar = behandelaar;
+            //om behandelaar te krijgen die aan de tussentabel moet gekoppelt worden
+            
+            var B = await _userManager.FindByIdAsync(bid);
+            //om email te verkrijgen van de aanvraag gebruiker
+            var user = await _userManager.FindByIdAsync(aanvraag.UserId);
+
+            //ingelogde user 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ingelogdeUser = await _userManager.FindByIdAsync(userId);
+            var status = await _context.Statussen.Where(s => s.Id.Equals(aanvraag.StatusId)).FirstOrDefaultAsync();
+
+
+
+
+            var aanvraagbehandelaar = new AanvraagBehandelaar
+            {
+                AanvraagId = id,
+                Aanvraag = aanvraag,
+                BehandelaarId = bid,
+                Behandelaar = B
+            };
+
+
+            if (id != aanvraag.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var aanmaak = new AanvraagGeschiedenis
+                    {
+                        AanvraagId = aanvraag.Id,
+                        Aanvraag = aanvraag,
+                        Actie = "Verwijderen van behandelaar " + aanvraagbehandelaar.Behandelaar.Voornaam + " " + aanvraagbehandelaar.Behandelaar.Achternaam,
+                        time = DateTime.Now,
+                        Voornaam = ingelogdeUser.Voornaam,
+                        Achternaam = ingelogdeUser.Achternaam,
+                        Status = status.Naam
+                    };
+                    _context.AanvraagGeschiedenis.Add(aanmaak);
+
+                    _context.AanvraagBehandelaars.Remove(aanvraagbehandelaar);
+                    _context.Update(aanvraag);
+                    await _context.SaveChangesAsync();
+                    await _emailSender.SendEmailAsync(user.Email, "Verandering aan je aanvraag", $"De behandelaar: " + B.Voornaam + " " + B.Achternaam + " van de aanvraag: " + aanvraag.Titel  + " is verwijderd. ");
+                    await _emailSender.SendEmailAsync(aanvraagbehandelaar.Behandelaar.Email, "Verwijderd van aanvraag: " + aanmaak.Aanvraag.Titel, $"Je bent verwijderd van de aanvraag: " + aanmaak.Aanvraag.Titel + ", log in om meer details te bekijken");
+
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                if (index)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else if (isAlles)
+                {
+                    return RedirectToAction(nameof(IndexAllAanvragen));
+                }
+                else if (isToegezen)
+                {
+                    return RedirectToAction(nameof(IndexToegewezen));
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(aanvraag);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBehandelaar(int id, Aanvraag aanvraag, bool index, bool isAlles, bool isToegezen)
+        {
+            //om behandelaar te krijgen die aan de tussentabel moet gekoppelt worden
+            var behandelaar = await _userManager.FindByIdAsync(aanvraag.BehandelaarId);
+            //om email te verkrijgen van de aanvraag gebruiker
+            var user = await _userManager.FindByIdAsync(aanvraag.UserId);
+
+            //ingelogde user 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ingelogdeUser = await _userManager.FindByIdAsync(userId);
+            var status = await _context.Statussen.Where(s => s.Id.Equals(aanvraag.StatusId)).FirstOrDefaultAsync();
+
+
+
+            var aanvraagbehandelaar = new AanvraagBehandelaar
+            {
+                AanvraagId = id,
+                Aanvraag = aanvraag,
+                BehandelaarId = aanvraag.BehandelaarId,
+                Behandelaar = behandelaar                
+            };
+            if (id != aanvraag.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var aanmaak = new AanvraagGeschiedenis
+                    {
+                        AanvraagId = aanvraag.Id,
+                        Aanvraag = aanvraag,
+                        Actie = "Toevoegen van behandelaar " + aanvraagbehandelaar.Behandelaar.Voornaam + " " + aanvraagbehandelaar.Behandelaar.Achternaam,
+                        time = DateTime.Now,
+                        Voornaam = ingelogdeUser.Voornaam,
+                        Achternaam = ingelogdeUser.Achternaam,
+                        Status = status.Naam
+                    };
+                    _context.AanvraagGeschiedenis.Add(aanmaak);
+
+
+                    await _context.AanvraagBehandelaars.AddAsync(aanvraagbehandelaar);
+                   _context.Update(aanvraag);
+                   await _context.SaveChangesAsync();
+                   await _emailSender.SendEmailAsync(user.Email, "Verandering aan je aanvraag", $"Er is een nieuwe behandelaar aan je aanvraag gehangen. " + aanvraagbehandelaar.Behandelaar.Voornaam + " " + aanvraagbehandelaar.Behandelaar.Achternaam + " zal nu meewerken aan een oplossing voor de aanvraag: " + aanvraag.Titel);
+                   await _emailSender.SendEmailAsync(aanvraagbehandelaar.Behandelaar.Email, "Niewe toegewezen aanvraag" + aanmaak.Aanvraag.Titel, $"Je ben toegevoegd aan een de aanvraag " + aanmaak.Aanvraag.Titel + ", log in om meer details te bekijken");
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                if (index)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else if (isAlles)
+                {
+                    return RedirectToAction(nameof(IndexAllAanvragen));
+                }
+                else if (isToegezen)
+                {
+                    return RedirectToAction(nameof(IndexToegewezen));
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(aanvraag);
         }
 
         // GET: Aanvraags/Edit/5
         public async Task<IActionResult> Edit(int? id, bool isVraag, string Url, bool index, bool isAlles, bool isToegezen)
         {
+
+            //redirecting naar juiste pagina
             ViewBag.index = index;
             ViewBag.isAlles = isAlles;
             ViewBag.isToegezen = isToegezen;
-
             IsIndex = index;
             IsIndexToegewezen = isToegezen;
             IsIndexallaanvragen = isAlles;
@@ -268,27 +496,51 @@ namespace ApplicationRequestIt.Controllers
                 return NotFound();
             }
             ViewData["UrlPath"] = Url;
-
-            var aanvraag = await _context.Aanvragen.SingleOrDefaultAsync(m => m.Id == id);
+            //aanvraag die ingeladen moet worden
+            var aanvraag = await _context.Aanvragen.Include(s => s.AanvraagBehandelaars).ThenInclude(s => s.Behandelaar)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            //user van de aanvraag
+            var user = _context.Users.Where(a => a.Id == aanvraag.UserId).SingleOrDefault();
+            //lijst van alle behandelaars
+            var AlleBehandelaars = _context.Users
+                .Where(x => x.isBehandelaar == true);
+           
             isVraag = aanvraag.IsVraag;
             if (aanvraag == null)
             {
                 return NotFound();
             }
+
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", aanvraag.UserId);
             ViewData["StatusList"] = new SelectList(_context.Statussen, "Id", "Naam");
-            ViewData["BehandelaarId"] = new SelectList(_context.Users.Where(u => u.isBehandelaar == true), "Id", "Voornaam", aanvraag.BehandelaarId);
+            ViewData["BehandelaarId"] = new SelectList(AlleBehandelaars, "Id", "Voornaam", aanvraag.AanvraagBehandelaars);
+            ViewData["isEnabled"] = user.isEnabled;
+            // ViewData["Behandelaars"] = aanvraag.AanvraagBehandelaars.ToList(); 
+
 
             return View(aanvraag);
         }
 
-        // POST: Aanvraags/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Aanvraag aanvraag, bool index, bool isAlles, bool isToegezen)
         {
+            var user = await _userManager.FindByIdAsync(aanvraag.UserId);
+
+            //lijstvanbehandelaarsvanaanvraag
+            var lijstbehandelaarsAanvraag = await _context.AanvraagBehandelaars.Include(x => x.Behandelaar).ToListAsync();
+
+            // var result = _context.AanvraagBehandelaars.Where(x => x.Behandelaar);
+
+            //ingelogde user 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ingelogdeUser = await _userManager.FindByIdAsync(userId);
+
+            //load related data
+            var status = await _context.Statussen.Where(s => s.Id.Equals(aanvraag.StatusId)).FirstOrDefaultAsync();
+
+
             if (id != aanvraag.Id)
             {
                 return NotFound();
@@ -297,8 +549,29 @@ namespace ApplicationRequestIt.Controllers
             {
                 try
                 {
+                    //aanmaak van history data 
+                    var aanmaak = new AanvraagGeschiedenis
+                    {
+                        AanvraagId = aanvraag.Id,
+                        Aanvraag = aanvraag,
+                        Actie = "Aanpassen van details van de aanvraag",
+                        time = DateTime.Now,
+                        Voornaam = ingelogdeUser.Voornaam,
+                        Achternaam = ingelogdeUser.Achternaam,
+                        Status = status.Naam
+                    };
+
+                    //toevoegen van data aan table              
+                    _context.AanvraagGeschiedenis.Add(aanmaak);
+                    //update van table zelf 
+
                     _context.Update(aanvraag);
                     await _context.SaveChangesAsync();
+                    await _emailSender.SendEmailAsync(user.Email, "Verandering aan je aanvraag", $"Er is een aanpassing gebeurt aan de aanvraag " + aanvraag.Titel + ",om de veranderingen te bekijken gelieve in te loggen.");
+                    //if (aanvraag.AanvraagBehandelaars.Any())
+                    //{ }
+                 
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -327,6 +600,7 @@ namespace ApplicationRequestIt.Controllers
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", aanvraag.UserId);
             ViewData["StatusId"] = new SelectList(_context.Statussen, "Id", "Id", aanvraag.StatusId);
+
             return View(aanvraag);
         }
 

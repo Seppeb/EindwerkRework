@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ApplicationRequestIt.Models.AanvraagGeschiedenis>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Geschiedenis</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Actie)
+                </th>
+            <th>
+                Status
+            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.time)
+                </th>
+                <th>
+                    Gebruiker
+                </th>           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Actie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voornaam)
+                - @Html.DisplayFor(modelItem => item.Achternaam)
+            </td>                       
+        </tr>
+}
+    </tbody>
+</table>
+<a asp-controller="Aanvraags" asp-action="Details" asp-route-id="@ViewBag.id" asp-route-isAlles="@ViewBag.isAlles" asp-route-index="@ViewBag.index" asp-route-isToegezen="@ViewBag.isToegezen">Terug naar details</a>

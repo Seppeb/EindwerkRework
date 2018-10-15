@@ -98,6 +98,13 @@ namespace ApplicationRequestIt.Controllers
                 {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
+                else
+                {
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);                   
+                    await _emailSender.SendEmailAsync(model.Email, "account bevestigen", $"bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier</a> te klikken.");
+                }
             }
 
             var userDb = _context.Users.Where(u => u.Email.Equals(model.Email)).FirstOrDefault();

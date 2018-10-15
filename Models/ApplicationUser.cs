@@ -10,6 +10,7 @@ namespace ApplicationRequestIt.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        //public int Id { get; set; }
         public string Voornaam { get; set; }
         public string Achternaam { get; set; }
         public string Klant { get; set; }

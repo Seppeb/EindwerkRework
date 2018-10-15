@@ -25,23 +25,12 @@
             </th>
             <th>
                 Gebruiker
-            </th>
-            <th>
-                @Html.DisplayNameFor(Model => Model.Aanmaakdatum)
-            </th>
-            <th>
-                Periode
-            <th>
-                @Html.DisplayNameFor(model => model.LinkVoorbeeldKlant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LinkVoorbeeldBehandelaar)
-            </th>
+            </th>           
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                behandelaar
+                @Html.DisplayNameFor(model => model.AanvraagBehandelaars)
             </th>
             <th></th>
         </tr>
@@ -57,19 +46,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Aanmaakdatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDatum) - @Html.DisplayFor(modelItem => item.EindDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LinkVoorbeeldKlant)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LinkVoorbeeldBehandelaar)
-            </td>
+            </td>         
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Naam)
             </td>
@@ -85,6 +62,7 @@
                         @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Voornaam) 
                         <label> </label>
                         @Html.DisplayFor(modelItem => behandelaar.Behandelaar.Achternaam)
+                        <br/>
                     }
                 </td>
            
@@ -95,9 +73,9 @@
             <td>
                 <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
             </td>
-            <td>
+            @*<td>
                 <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
-            </td>
+            </td>*@
         </tr>
             }
         }
@@ -194,9 +172,9 @@
                     <td>
                         <a class="btn green glyphicon glyphicon-info-sign" asp-action="Details" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
                     </td>
-                    <td>
+                    @*<td>
                         <a class="btn red glyphicon glyphicon-trash" asp-action="Delete" asp-route-id="@item.Id" asp-route-isAlles="true"></a>
-                    </td>
+                    </td>*@
                 </tr>
                 }
             }

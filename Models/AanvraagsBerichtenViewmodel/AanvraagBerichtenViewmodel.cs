@@ -10,5 +10,6 @@ namespace ApplicationRequestIt.Models.AanvraagsBerichtenViewmodel
         public IList<Bericht> berichten { get; set; }
         public Aanvraag aanvraag { get; set; }
         public Bericht bericht { get; set; }
+        public IList<ApplicationUser> behandelaars { get; set; }
     }
 }

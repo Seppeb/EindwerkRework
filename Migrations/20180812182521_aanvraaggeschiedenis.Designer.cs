@@ -11,9 +11,10 @@ using System;
 namespace ApplicationRequestIt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180812182521_aanvraaggeschiedenis")]
+    partial class aanvraaggeschiedenis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,8 +86,6 @@ namespace ApplicationRequestIt.Migrations
                     b.Property<string>("Achternaam");
 
                     b.Property<string>("Actie");
-
-                    b.Property<string>("Status");
 
                     b.Property<string>("Voornaam");
 

@@ -11,9 +11,10 @@ using System;
 namespace ApplicationRequestIt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180812122922_dbsetvooraanvraagbehandelaars")]
+    partial class dbsetvooraanvraagbehandelaars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,30 +74,6 @@ namespace ApplicationRequestIt.Migrations
                     b.HasIndex("BehandelaarId");
 
                     b.ToTable("AanvraagBehandelaars");
-                });
-
-            modelBuilder.Entity("ApplicationRequestIt.Models.AanvraagGeschiedenis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AanvraagId");
-
-                    b.Property<string>("Achternaam");
-
-                    b.Property<string>("Actie");
-
-                    b.Property<string>("Status");
-
-                    b.Property<string>("Voornaam");
-
-                    b.Property<DateTime>("time");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AanvraagId");
-
-                    b.ToTable("AanvraagGeschiedenis");
                 });
 
             modelBuilder.Entity("ApplicationRequestIt.Models.ApplicationUser", b =>
@@ -337,14 +314,6 @@ namespace ApplicationRequestIt.Migrations
                     b.HasOne("ApplicationRequestIt.Models.ApplicationUser", "Behandelaar")
                         .WithMany("AanvraagBehandelaars")
                         .HasForeignKey("BehandelaarId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ApplicationRequestIt.Models.AanvraagGeschiedenis", b =>
-                {
-                    b.HasOne("ApplicationRequestIt.Models.Aanvraag", "Aanvraag")
-                        .WithMany("AanvraagGeschiedenis")
-                        .HasForeignKey("AanvraagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

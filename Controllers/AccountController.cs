@@ -98,7 +98,7 @@ namespace ApplicationRequestIt.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Login mislukt, gelieve juiste paswoord en gebruikersnaam te geven. Als het account nog niet geactiveerd is, gelieve mail te kijken.");
                     return View(model);
                 }
             }
@@ -272,16 +272,29 @@ namespace ApplicationRequestIt.Controllers
 
                     
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/confirmEmail",
-                        pageHandler: null,
-                        values: new {userId = user.Id, code = code},
-                        protocol: Request.Scheme);                  
-                    
-                    await _emailSender.SendEmailAsync(model.Email, "account bevestigen", $"bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier</a> te klikken.");
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/confirmEmail",
+                    //    pageHandler: null,
+                    //    values: new {userId = user.Id, code = code},
+                    //    protocol: Request.Scheme);
 
-                   // await _signInManager.SignInAsync(user, isPersistent: false);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+
+                    //Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { userId = user.Id, code = code },
+                    //    protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(model.Email, "account bevestigen", $"bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier</a> te klikken.");
+                    
+
+
+                    // await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }

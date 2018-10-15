@@ -10,6 +10,7 @@ using ApplicationRequestIt.Models;
 using Microsoft.AspNetCore.Authorization;
 using ApplicationRequestIt.Utility;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace ApplicationRequestIt.Controllers
 {
@@ -18,6 +19,8 @@ namespace ApplicationRequestIt.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        public bool heeftaanvragen;
+        
 
 
         public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -90,49 +93,69 @@ namespace ApplicationRequestIt.Controllers
         // GET: ApplicationUsers/Edit/5
         public async Task<IActionResult> Edit(string id, bool isAdmin, bool isBehandelaar)
         {
-
+            
             if (id == null)
             {
                 return NotFound();
             }
 
             var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
+
+            var lijstaanvragen = _context.AanvraagBehandelaars
+               .Where(a => a.BehandelaarId == id)
+               .Include(a => a.Aanvraag);
+
+            if (!lijstaanvragen.Any())
+            {
+                heeftaanvragen = false;
+            }
+            else
+            {
+                heeftaanvragen = true;
+            }
+
+            //var aanvraagBehandelaar = _context.AanvraagBehandelaars.Where(b => b.BehandelaarId == id);
             if (applicationUser == null)
             {
                 return NotFound();
             }
+
+            //ViewData["lijstToegewezenAanvragen"] = lijstaanvragen;
+            ViewData["heeftAanvragen"] = heeftaanvragen;
+            
+
             return View(applicationUser);
         }
 
 
-        public void setAdmin(ApplicationUser user)
+        public async void setAdmin(ApplicationUser user)
         {
             if (user.isAdmin == true)
             {
-                _userManager.AddToRoleAsync(user, SD.AdminEndUser);
-                _context.SaveChangesAsync();
+               await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+               await _context.SaveChangesAsync();
             }
             else if (user.isAdmin != true)
             {
-                _userManager.RemoveFromRoleAsync(user, SD.AdminEndUser);
-                _context.SaveChangesAsync();
+                await _userManager.RemoveFromRoleAsync(user, SD.AdminEndUser);
+                await _context.SaveChangesAsync();
             }
 
+           
         }
-        public void setBehandelaar(ApplicationUser user)
+
+        public async void setBehandelaar(ApplicationUser user)
         {
             if (user.isBehandelaar == true)
-            {
-                _userManager.AddToRoleAsync(user, SD.BehandelaarEndUser);
-                _context.SaveChangesAsync();
+            {                
+                await _userManager.AddToRoleAsync(user, SD.BehandelaarEndUser);
+                await _context.SaveChangesAsync();
             }
             else if (user.isBehandelaar != true)
             {
-                _userManager.RemoveFromRoleAsync(user, SD.BehandelaarEndUser);
-                _context.SaveChangesAsync();
-            }
-
-
+               await _userManager.RemoveFromRoleAsync(user, SD.BehandelaarEndUser);
+                await _context.SaveChangesAsync();
+            }            
 
         }
 
@@ -143,8 +166,30 @@ namespace ApplicationRequestIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, ApplicationUser applicationUser)
         {
-            setAdmin(applicationUser);
-            setBehandelaar(applicationUser);
+            //var admin = applicationUser;
+            //setAdmin(admin);
+            //var behandelaar = admin;
+            //setBehandelaar(behandelaar);
+            
+            //if (applicationUser.isAdmin == true)
+            //{
+            //    if (!await _userManager.IsInRoleAsync(gebruiker, SD.AdminEndUser))
+            //    {
+            //       await _userManager.AddToRoleAsync(gebruiker, SD.AdminEndUser);
+            //    }
+            //    await _context.SaveChangesAsync();
+            //} else if (applicationUser.isAdmin == false)
+
+            //{
+            //    if (await _userManager.IsInRoleAsync(gebruiker, SD.AdminEndUser))
+            //    {
+            //        await _userManager.RemoveFromRoleAsync(gebruiker, SD.AdminEndUser);
+            //    }
+            //    await _context.SaveChangesAsync();
+            //}
+            
+
+
 
             if (id != applicationUser.Id)
             {
@@ -154,8 +199,46 @@ namespace ApplicationRequestIt.Controllers
             {
                 try
                 {
-                    _context.Update(applicationUser);
-                    _context.SaveChangesAsync();
+                   _context.Update(applicationUser);
+                  await  _context.SaveChangesAsync();
+
+                    //rollen beheer op basis van bool isadmin/isbehandelaar
+                    var gebruiker = await _userManager.FindByIdAsync(applicationUser.Id);
+
+                    if (applicationUser.isAdmin == true)
+                    {
+                        if (!await _userManager.IsInRoleAsync(gebruiker, SD.AdminEndUser))
+                        {
+                            await _userManager.AddToRoleAsync(gebruiker, SD.AdminEndUser);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (applicationUser.isAdmin == false)
+
+                    {
+                        if (await _userManager.IsInRoleAsync(gebruiker, SD.AdminEndUser))
+                        {
+                            await _userManager.RemoveFromRoleAsync(gebruiker, SD.AdminEndUser);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                    if (applicationUser.isBehandelaar == true)
+                    {
+                        if (!await _userManager.IsInRoleAsync(gebruiker, SD.BehandelaarEndUser))
+                        {
+                            await _userManager.AddToRoleAsync(gebruiker, SD.BehandelaarEndUser);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (applicationUser.isBehandelaar == false)
+
+                    {
+                        if (await _userManager.IsInRoleAsync(gebruiker, SD.BehandelaarEndUser))
+                        {
+                            await _userManager.RemoveFromRoleAsync(gebruiker, SD.BehandelaarEndUser);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -180,16 +263,31 @@ namespace ApplicationRequestIt.Controllers
             {
                 return NotFound();
             }
+            //aangelogde user
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var applicationUser = await _context.ApplicationUser
                 .Include(a => a.BehandelaarAanvragen)
                 .Include(a => a.CustomerAanvragen)
                 .SingleOrDefaultAsync(m => m.Id == id);
+
+            var activeAanvragen = _context.Aanvragen
+                .Where(x => x.UserId == applicationUser.Id && !x.Status.Naam.Equals("Afgesloten"));
+                
+            if (activeAanvragen.Any() || userId.Equals(id))
+            {
+                heeftaanvragen = true;
+            }
+            else
+            {
+                heeftaanvragen = false;
+            }
+
             if (applicationUser == null)
             {
                 return NotFound();
             }
-
+            ViewData["heeftAanvragen"] = heeftaanvragen;
             return View(applicationUser);
         }
 
